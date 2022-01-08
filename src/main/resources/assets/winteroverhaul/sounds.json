@@ -1,0 +1,11 @@
+{
+  "entity.robin.ambient": {
+    "subtitle": "subtitles.winteroverhaul.entity.robin.ambient",
+    "sounds": [
+      {
+        "name": "mob/parrot/idle3",
+        "volume": 0.7
+      }
+    ]
+  }
+}

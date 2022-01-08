@@ -1,0 +1,7 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "winteroverhaul:item/iceskates",
+        "layer1": "winteroverhaul:item/iceskates_overlay"
+    }
+}

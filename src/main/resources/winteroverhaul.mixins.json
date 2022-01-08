@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "tech.thatgravyboat.winteroverhaul.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "winteroverhaul.refmap.json",
+  "minVersion": "0.8.5",
+  "mixins": [
+    "MixinLivingEntity",
+    "MixinSnowball",
+    "MixinSnowGolem"
+  ]
+}
