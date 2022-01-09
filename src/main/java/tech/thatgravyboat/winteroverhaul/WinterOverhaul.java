@@ -28,7 +28,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import software.bernie.example.GeckoLibMod;
 import tech.thatgravyboat.winteroverhaul.common.entity.IUpgradeAbleSnowGolem;
 import tech.thatgravyboat.winteroverhaul.common.entity.Robin;
 import tech.thatgravyboat.winteroverhaul.common.items.GolemUpgradeSlot;
@@ -44,7 +43,6 @@ public class WinterOverhaul {
     public static final Logger LOGGER = LogManager.getLogger();
 
     public WinterOverhaul() {
-        GeckoLibMod.DISABLE_IN_DEV = true;
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         ModItems.ITEMS.register(modEventBus);
         ModParticles.PARTICLES.register(modEventBus);
