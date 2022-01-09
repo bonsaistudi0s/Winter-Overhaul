@@ -68,16 +68,20 @@ public class GolemRangedAttackGoal extends Goal {
         if (!(snowGolem instanceof IUpgradeAbleSnowGolem upgradeAbleSnowGolem)) return interval;
         Item scarf = upgradeAbleSnowGolem.getGolemUpgradeInSlot(GolemUpgradeSlot.SCARF).getItem();
         Item hat = upgradeAbleSnowGolem.getGolemUpgradeInSlot(GolemUpgradeSlot.HAT).getItem();
-        boolean hasCyanItem = scarf.equals(ModItems.CYAN_SCARF.get()) || hat.equals(ModItems.CYAN_HAT.get());
-        return hasCyanItem ? interval/2 : interval;
+        int amount = 1;
+        amount += scarf.equals(ModItems.CYAN_SCARF.get()) ? 1 : 0;
+        amount += hat.equals(ModItems.CYAN_HAT.get()) ? 1 : 0;
+        return interval/amount;
     }
 
     public float getAttackRadius() {
         if (!(snowGolem instanceof IUpgradeAbleSnowGolem upgradeAbleSnowGolem)) return interval;
         Item scarf = upgradeAbleSnowGolem.getGolemUpgradeInSlot(GolemUpgradeSlot.SCARF).getItem();
         Item hat = upgradeAbleSnowGolem.getGolemUpgradeInSlot(GolemUpgradeSlot.HAT).getItem();
-        boolean hasGreenItem = scarf.equals(ModItems.GREEN_SCARF.get()) || hat.equals(ModItems.GREEN_HAT.get());
-        return hasGreenItem ? attackRadius*1.5f : attackRadius;
+        float amount = 1f;
+        amount+= scarf.equals(ModItems.GREEN_SCARF.get()) ? 0.5f : 0f;
+        amount+= hat.equals(ModItems.GREEN_HAT.get()) ? 0.5f : 0f;
+        return attackRadius*amount;
     }
 
     /**

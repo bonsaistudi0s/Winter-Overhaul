@@ -7,11 +7,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class SnowflakeParticle extends TextureSheetParticle {
 
-
-    protected SnowflakeParticle(ClientLevel level, double x, double y, double z) {
-        super(level, x, y, z);
-    }
-
     protected SnowflakeParticle(ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
         super(level, x, y, z, 0, 0, 0);
         this.scale(0.25f);
@@ -19,8 +14,6 @@ public class SnowflakeParticle extends TextureSheetParticle {
         this.yd /= 4;
         this.zd /= 4;
     }
-
-
 
     @Override
     public @NotNull ParticleRenderType getRenderType() {

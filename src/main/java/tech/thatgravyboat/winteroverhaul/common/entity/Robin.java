@@ -134,16 +134,6 @@ public class Robin extends Animal implements FlyingAnimal, IAnimatable {
     }
 
     @Override
-    protected SoundEvent getHurtSound(@NotNull DamageSource source) {
-        return SoundEvents.PARROT_HURT;
-    }
-
-    @Override
-    protected SoundEvent getDeathSound() {
-        return SoundEvents.PARROT_DEATH;
-    }
-
-    @Override
     public float getVoicePitch() {
         return (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F;
     }

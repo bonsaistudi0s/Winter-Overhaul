@@ -8,7 +8,9 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
+import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 import tech.thatgravyboat.winteroverhaul.WinterOverhaul;
@@ -35,11 +37,12 @@ public class RandomButtonLayer extends GeoLayerRenderer {
     @Override
     public void render(PoseStack stack, MultiBufferSource buffer, int packedLightIn, Entity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if (entity.isInvisible()) return;
+        if (!(entity instanceof LivingEntity livingEntity)) return;
         GeoModel normalModel = this.getEntityModel().getModel(this.getEntityModel().getModelLocation(null));
         VertexConsumer consumer = buffer.getBuffer(RenderType.entityTranslucent(getRandomTexture(entity.getUUID())));
         getRenderer().render(normalModel, entity, partialTicks,
                 null, stack, null, consumer,
-                packedLightIn, OverlayTexture.NO_OVERLAY,
+                packedLightIn, GeoEntityRenderer.getPackedOverlay(livingEntity, 0),
                 1f, 1f, 1f, 1f);
     }
 

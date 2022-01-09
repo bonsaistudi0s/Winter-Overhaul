@@ -71,6 +71,15 @@ public class WinterOverhaul {
             event.setCancellationResult(InteractionResult.sidedSuccess(event.getPlayer().level.isClientSide));
             event.setCanceled(true);
         }
+        if (stack.isEmpty() && event.getPlayer().isShiftKeyDown()) {
+            for (GolemUpgradeSlot value : GolemUpgradeSlot.values()) {
+                ItemStack oldStack = upgradeAbleSnowGolem.setGolemUpgradeInSlot(value, ItemStack.EMPTY);
+                if (oldStack.isEmpty()) continue;
+                event.getPlayer().drop(oldStack, true);
+            }
+            event.setCancellationResult(InteractionResult.sidedSuccess(event.getPlayer().level.isClientSide));
+            event.setCanceled(true);
+        }
     }
 
     @SubscribeEvent

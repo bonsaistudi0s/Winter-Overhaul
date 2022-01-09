@@ -13,7 +13,9 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.RangedAttackGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.SnowGolem;
+import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.projectile.Snowball;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -28,6 +30,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+import tech.thatgravyboat.winteroverhaul.common.entity.GolemAttackableTargetGoal;
 import tech.thatgravyboat.winteroverhaul.common.entity.GolemRangedAttackGoal;
 import tech.thatgravyboat.winteroverhaul.common.entity.ISnowGolemSnowball;
 import tech.thatgravyboat.winteroverhaul.common.entity.IUpgradeAbleSnowGolem;
@@ -53,10 +56,12 @@ public abstract class MixinSnowGolem extends Mob implements IUpgradeAbleSnowGole
     private void onAiStep(CallbackInfo ci) {
         SnowGolem golem = (SnowGolem) ((Object)this);
         if (!golem.level.isClientSide) {
-            upgrades.forEach(stack -> {
-                if (stack.getItem() instanceof GolemUpgradeItem upgradeItem) upgradeItem.tick(stack, golem);
-            });
-        }else {
+            if (upgrades != null) {
+                upgrades.forEach(stack -> {
+                    if (stack.getItem() instanceof GolemUpgradeItem upgradeItem) upgradeItem.tick(stack, golem);
+                });
+            }
+        }else if (this.tickCount % 2 == 0) {
             SimpleParticleType particleType;
             float health = golem.getHealth()/golem.getMaxHealth();
             if (health >= 0.6f) particleType = ModParticles.SNOWFAKE_1.get();
@@ -71,6 +76,8 @@ public abstract class MixinSnowGolem extends Mob implements IUpgradeAbleSnowGole
         SnowGolem golem = (SnowGolem) ((Object)this);
         golem.goalSelector.getAvailableGoals().removeIf(goal -> goal.getGoal() instanceof RangedAttackGoal);
         golem.goalSelector.addGoal(1, new GolemRangedAttackGoal(golem, 1.25D, 20, 10.0F));
+        golem.targetSelector.getAvailableGoals().removeIf(goal -> goal.getGoal() instanceof NearestAttackableTargetGoal);
+        golem.targetSelector.addGoal(1, new GolemAttackableTargetGoal<>(this, Mob.class, 10, true, false, entity -> entity instanceof Enemy));
     }
 
     @Inject(method = "performRangedAttack", locals = LocalCapture.CAPTURE_FAILHARD, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;getEyeY()D"))
@@ -79,9 +86,9 @@ public abstract class MixinSnowGolem extends Mob implements IUpgradeAbleSnowGole
             snowGolemSnowball.winteroverhaul_setGolemSnowball(true);
             Item scraf = getGolemUpgradeInSlot(GolemUpgradeSlot.SCARF).getItem();
             Item hat = getGolemUpgradeInSlot(GolemUpgradeSlot.HAT).getItem();
-            if (scraf.equals(ModItems.RED_SCARF.get()) || hat.equals(ModItems.RED_HAT.get())) {
-                snowGolemSnowball.winteroverhaul_setGolemMultiplier(2);
-            }
+            int amount = hat.equals(ModItems.RED_HAT.get()) ? 2 : 0;
+            amount += scraf.equals(ModItems.RED_SCARF.get()) ? 2 : 0;
+            if (amount > 0) snowGolemSnowball.winteroverhaul_setGolemMultiplier(amount);
             Item face = getGolemUpgradeInSlot(GolemUpgradeSlot.FACE).getItem();
             if (face.equals(Items.CARROT) || face.equals(Items.GOLDEN_CARROT)) {
                 snowGolemSnowball.winteroverhaul_addMobEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 1));
@@ -95,10 +102,12 @@ public abstract class MixinSnowGolem extends Mob implements IUpgradeAbleSnowGole
     @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
     private void onSaveNbt(CompoundTag pCompound, CallbackInfo ci) {
         ListTag listtag = new ListTag();
-        for(ItemStack itemstack : this.upgrades) {
-            CompoundTag compoundtag = new CompoundTag();
-            if (!itemstack.isEmpty()) itemstack.save(compoundtag);
-            listtag.add(compoundtag);
+        if (upgrades != null) {
+            for (ItemStack itemstack : this.upgrades) {
+                CompoundTag compoundtag = new CompoundTag();
+                if (!itemstack.isEmpty()) itemstack.save(compoundtag);
+                listtag.add(compoundtag);
+            }
         }
         pCompound.put("GolemUpgrades", listtag);
     }
@@ -107,20 +116,24 @@ public abstract class MixinSnowGolem extends Mob implements IUpgradeAbleSnowGole
     private void onLoadNbt(CompoundTag pCompound, CallbackInfo ci) {
         if (pCompound.contains("GolemUpgrades", Tag.TAG_LIST)) {
             ListTag listtag = pCompound.getList("GolemUpgrades", Tag.TAG_COMPOUND);
-            for(int i = 0; i < this.upgrades.size(); ++i) {
-                CompoundTag itemTag = listtag.getCompound(i);
-                if (!itemTag.isEmpty()) this.upgrades.set(i, ItemStack.of(itemTag));
+            if (upgrades != null) {
+                for (int i = 0; i < this.upgrades.size(); ++i) {
+                    CompoundTag itemTag = listtag.getCompound(i);
+                    if (!itemTag.isEmpty()) this.upgrades.set(i, ItemStack.of(itemTag));
+                }
             }
         }
     }
 
     @Override
     public ItemStack setGolemUpgradeInSlot(GolemUpgradeSlot slot, ItemStack stack) {
+        if (upgrades == null) return ItemStack.EMPTY;
         return upgrades.set(slot.index, stack);
     }
 
     @Override
     public ItemStack getGolemUpgradeInSlot(GolemUpgradeSlot slot) {
+        if (upgrades == null) return ItemStack.EMPTY;
         return upgrades.get(slot.index);
     }
 
