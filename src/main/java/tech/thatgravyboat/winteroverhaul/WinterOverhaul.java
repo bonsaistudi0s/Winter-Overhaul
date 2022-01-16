@@ -1,6 +1,7 @@
 package tech.thatgravyboat.winteroverhaul;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.cauldron.CauldronInteraction;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
@@ -135,6 +136,7 @@ public class WinterOverhaul {
                     return (isLeaves || isSnow || isGrass || state.isAir()) && level.getRawBrightness(pos, 0) > 8;
 
                 });
+        CauldronInteraction.WATER.put(ModItems.SKATES.get(), CauldronInteraction.DYED_ITEM);
     }
 
     private static Item getRandomHatAndScarf(int randomInt) {
