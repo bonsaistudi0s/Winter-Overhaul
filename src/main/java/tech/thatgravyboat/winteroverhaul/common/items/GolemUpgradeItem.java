@@ -94,9 +94,12 @@ public class GolemUpgradeItem extends GeoArmorItem implements IAnimatable {
         if (item.equals(ModItems.TOP_HAT.get()) && golem.tickCount % 20 == 0) {
             golem.heal(0.5f);
         }
-        if (!golem.hasEffect(MobEffects.HEALTH_BOOST)) {
-            if (item.equals(ModItems.TOP_HAT.get())) {
-                golem.addEffect(new MobEffectInstance(MobEffects.HEALTH_BOOST, 20, 0, false, false));
+        if (item.equals(ModItems.TOP_HAT.get())) {
+            MobEffectInstance effectInstance = golem.getEffect(MobEffects.HEALTH_BOOST);
+            if (effectInstance == null || golem.tickCount % 5 == 0) {
+                MobEffectInstance healthBoost = new MobEffectInstance(MobEffects.HEALTH_BOOST, 20, 0, false, false);
+                if (effectInstance == null) golem.addEffect(healthBoost);
+                else effectInstance.update(healthBoost);
             }
         }
     }
