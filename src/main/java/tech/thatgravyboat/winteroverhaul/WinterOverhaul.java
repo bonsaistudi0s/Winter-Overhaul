@@ -1,6 +1,7 @@
 package tech.thatgravyboat.winteroverhaul;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.cauldron.CauldronInteraction;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionResult;
@@ -91,9 +92,9 @@ public class WinterOverhaul {
         boolean isZombie = type.equals(EntityType.ZOMBIE);
 
         if (isSkeleton || isZombie) {
-            Biome biome = event.getWorld().getBiome(event.getEntity().blockPosition());
+            Holder<Biome> biome = event.getWorld().getBiomeManager().m_204214_(event.getEntity().blockPosition());
 
-            if (biome.getPrecipitation().equals(Biome.Precipitation.SNOW)) {
+            if (biome.m_203633_() && biome.m_203334_().getPrecipitation().equals(Biome.Precipitation.SNOW)) {
                 if (mob.getRandom().nextFloat() > 0.90f && mob.getRandom().nextFloat() > 0.5f){
                     Item item = getRandomHatAndScarf(mob.getRandom().nextInt(8));
                     mob.setItemSlot(EquipmentSlot.HEAD, new ItemStack(item));
@@ -129,8 +130,8 @@ public class WinterOverhaul {
         SpawnPlacements.register(ModEntities.ROBIN.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING,
                 (entity, level, spawn, pos, random) -> {
                     BlockState state = level.getBlockState(pos.below());
-                    boolean isLeaves = state.is(BlockTags.LEAVES);
-                    boolean isSnow = state.is(BlockTags.SNOW);
+                    boolean isLeaves = state.m_204336_(BlockTags.LEAVES);
+                    boolean isSnow = state.m_204336_(BlockTags.SNOW);
                     boolean isGrass = state.is(Blocks.GRASS_BLOCK);
 
                     return (isLeaves || isSnow || isGrass || state.isAir()) && level.getRawBrightness(pos, 0) > 8;
