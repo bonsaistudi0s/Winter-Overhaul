@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
@@ -27,7 +28,7 @@ public class UpgradeLayer extends GeoLayerRenderer {
     public void render(PoseStack stack, MultiBufferSource buffer, int packedLightIn, Entity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if (entity.isInvisible()) return;
         if (entity instanceof IUpgradeAbleSnowGolem upgradeAbleSnowGolem) {
-            GeoModel normalModel = this.getEntityModel().getModel(this.getEntityModel().getModelLocation(null));
+            GeoModel normalModel = this.getEntityModel().getModel(this.getEntityModel().getModelResource(null));
 
             ItemStack scarf = upgradeAbleSnowGolem.getGolemUpgradeInSlot(GolemUpgradeSlot.SCARF);
             getTexture(scarf).ifPresent(texture ->
@@ -56,7 +57,7 @@ public class UpgradeLayer extends GeoLayerRenderer {
 
     private static Optional<ResourceLocation> getTexture(ItemStack item) {
         if (item.isEmpty()) return Optional.empty();
-        ResourceLocation itemPath = item.getItem().getRegistryName();
+        ResourceLocation itemPath = ForgeRegistries.ITEMS.getKey(item.getItem());
         if (itemPath == null) return Optional.empty();
         return Optional.of(new ResourceLocation(WinterOverhaul.MODID, "textures/entity/upgrades/"+itemPath.getPath()+".png"));
     }

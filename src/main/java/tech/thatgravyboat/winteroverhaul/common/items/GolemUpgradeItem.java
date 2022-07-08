@@ -5,8 +5,6 @@ import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -116,13 +114,13 @@ public class GolemUpgradeItem extends GeoArmorItem implements IAnimatable {
 
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Level pLevel, @NotNull List<Component> tooltip, @NotNull TooltipFlag flag) {
-        tooltip.add(TextComponent.EMPTY);
-        tooltip.add(new TranslatableComponent("item.winteroverhaul.upgrade.header").withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.empty());
+        tooltip.add(Component.translatable("item.winteroverhaul.upgrade.header").withStyle(ChatFormatting.GRAY));
         tooltip.add(getDesc().withStyle(ChatFormatting.BLUE));
     }
 
     public MutableComponent getDesc() {
-        return new TranslatableComponent(this.getDescriptionId() + ".desc");
+        return Component.translatable(this.getDescriptionId() + ".desc");
     }
 
     @Override

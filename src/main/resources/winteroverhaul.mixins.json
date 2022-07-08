@@ -5,6 +5,7 @@
   "refmap": "winteroverhaul.refmap.json",
   "minVersion": "0.8.5",
   "mixins": [
+    "MixinEntity",
     "MixinLivingEntity",
     "MixinSnowball",
     "MixinSnowGolem"

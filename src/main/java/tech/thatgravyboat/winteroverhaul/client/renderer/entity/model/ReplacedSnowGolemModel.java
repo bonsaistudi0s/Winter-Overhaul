@@ -16,17 +16,17 @@ public class ReplacedSnowGolemModel<E extends ReplacedSnowGolem> extends Animate
     private static final ResourceLocation ANIMATION = new ResourceLocation(WinterOverhaul.MODID, "animations/snow_golem.animation.json");
 
     @Override
-    public ResourceLocation getModelLocation(E object) {
+    public ResourceLocation getModelResource(E object) {
         return MODEL;
     }
 
     @Override
-    public ResourceLocation getTextureLocation(E object) {
+    public ResourceLocation getTextureResource(E object) {
         return BASE_TEXTURE;
     }
 
     @Override
-    public ResourceLocation getAnimationFileLocation(E animatable) {
+    public ResourceLocation getAnimationResource(E animatable) {
         return ANIMATION;
     }
 
@@ -36,27 +36,17 @@ public class ReplacedSnowGolemModel<E extends ReplacedSnowGolem> extends Animate
 
         if (customPredicate == null) return;
 
-        EntityModelData extraData = getExtraData(customPredicate, EntityModelData.class);
+        EntityModelData extraData = getExtraData(customPredicate);
 
         IBone head = this.getAnimationProcessor().getBone("head");
         head.setRotationY(extraData.netHeadYaw * ((float)Math.PI / 180F));
         head.setRotationX(extraData.headPitch * ((float)Math.PI / 180F));
         IBone upperBody = this.getAnimationProcessor().getBone("body_2");
         upperBody.setRotationY(extraData.netHeadYaw * ((float)Math.PI / 180F) * 0.25F);
-//        float sinRotY = Mth.sin(upperBody.getRotationY());
-//        float cosRotY = Mth.cos(upperBody.getRotationY());
-//        IBone leftArm = this.getAnimationProcessor().getBone("left_arm");
-//        IBone rightArm = this.getAnimationProcessor().getBone("right_arm");
-//        leftArm.setRotationY(upperBody.getRotationY());
-//        rightArm.setRotationY(upperBody.getRotationY() + (float)Math.PI);
-//        leftArm.setPositionX(cosRotY * 5.0F);
-//        leftArm.setPositionZ(-sinRotY * 5.0F);
-//        rightArm.setPositionX(-cosRotY * 5.0F);
-//        rightArm.setPositionZ(sinRotY * 5.0F);
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    private static <T> T getExtraData(AnimationEvent customPredicate, Class<T> clazz) {
-        return (T) customPredicate.getExtraDataOfType(clazz).get(0);
+    private static <T> T getExtraData(AnimationEvent customPredicate) {
+        return (T) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
     }
 }

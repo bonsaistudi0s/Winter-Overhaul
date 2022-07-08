@@ -13,17 +13,17 @@ import java.util.List;
 public class RobinModel extends AnimatedGeoModel<Robin> {
 
     @Override
-    public ResourceLocation getModelLocation(Robin object) {
+    public ResourceLocation getModelResource(Robin object) {
         return new ResourceLocation(WinterOverhaul.MODID, "geo/robin.geo.json");
     }
 
     @Override
-    public ResourceLocation getTextureLocation(Robin object) {
+    public ResourceLocation getTextureResource(Robin object) {
         return new ResourceLocation(WinterOverhaul.MODID, "textures/entity/robin.png");
     }
 
     @Override
-    public ResourceLocation getAnimationFileLocation(Robin animatable) {
+    public ResourceLocation getAnimationResource(Robin animatable) {
         return new ResourceLocation(WinterOverhaul.MODID, "animations/robin.animation.json");
     }
 
@@ -33,9 +33,14 @@ public class RobinModel extends AnimatedGeoModel<Robin> {
 
         if (customPredicate == null) return;
 
-        List<EntityModelData> extraDataOfType = customPredicate.getExtraDataOfType(EntityModelData.class);
+        EntityModelData extraDataOfType = getExtraData(customPredicate);
         var head = this.getAnimationProcessor().getBone("head");
-        head.setRotationX((extraDataOfType.get(0).headPitch * ((float)Math.PI / 180F))-0.261799f);
-        head.setRotationY(extraDataOfType.get(0).netHeadYaw * ((float)Math.PI / 180F));
+        head.setRotationX((extraDataOfType.headPitch * ((float)Math.PI / 180F))-0.261799f);
+        head.setRotationY(extraDataOfType.netHeadYaw * ((float)Math.PI / 180F));
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private static <T> T getExtraData(AnimationEvent customPredicate) {
+        return (T) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
     }
 }

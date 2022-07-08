@@ -35,7 +35,7 @@ public class RandomArmLayer extends GeoLayerRenderer {
     @Override
     public void render(PoseStack stack, MultiBufferSource buffer, int packedLightIn, Entity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if (entity.isInvisible()) return;
-        GeoModel normalModel = this.getEntityModel().getModel(this.getEntityModel().getModelLocation(null));
+        GeoModel normalModel = this.getEntityModel().getModel(this.getEntityModel().getModelResource(null));
         VertexConsumer consumer = buffer.getBuffer(RenderType.entityTranslucent(getRandomTexture(entity.getUUID())));
         getRenderer().render(normalModel, entity, partialTicks,
                 null, stack, null, consumer,

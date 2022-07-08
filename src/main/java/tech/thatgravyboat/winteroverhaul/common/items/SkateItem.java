@@ -9,7 +9,7 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.DyeableLeatherItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.client.IItemRenderProperties;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.manager.AnimationData;
@@ -38,14 +38,18 @@ public class SkateItem extends ArmorItem implements IAnimatable, DyeableLeatherI
         return factory;
     }
 
+
+
     @Override
-    public void initializeClient(@NotNull Consumer<IItemRenderProperties> consumer) {
+    public void initializeClient(@NotNull Consumer<IClientItemExtensions> consumer) {
         super.initializeClient(consumer);
-        consumer.accept(new IItemRenderProperties() {
+        consumer.accept(new IClientItemExtensions() {
+
             @Override
-            public HumanoidModel<?> getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot armorSlot, HumanoidModel<?> _default) {
-                return (HumanoidModel<?>) GeoArmorRenderer.getRenderer(SkateItem.this.getClass()).applyEntityStats(_default)
-                        .applySlot(armorSlot).setCurrentItem(entityLiving, itemStack, armorSlot);
+            public @NotNull HumanoidModel<?> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original) {
+                return (HumanoidModel<?>) GeoArmorRenderer.getRenderer(SkateItem.this.getClass(), livingEntity)
+                        .applyEntityStats(original)
+                        .applySlot(equipmentSlot).setCurrentItem(livingEntity, itemStack, equipmentSlot);
             }
         });
     }

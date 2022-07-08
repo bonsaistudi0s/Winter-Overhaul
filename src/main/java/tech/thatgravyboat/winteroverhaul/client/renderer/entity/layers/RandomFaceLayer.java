@@ -40,7 +40,7 @@ public class RandomFaceLayer extends GeoLayerRenderer {
         if (entity.isInvisible()) return;
         if (entity instanceof SnowGolem snowGolem && snowGolem.hasPumpkin()) return;
         if (!(entity instanceof LivingEntity livingEntity)) return;
-        GeoModel normalModel = this.getEntityModel().getModel(this.getEntityModel().getModelLocation(null));
+        GeoModel normalModel = this.getEntityModel().getModel(this.getEntityModel().getModelResource(null));
         VertexConsumer consumer = buffer.getBuffer(RenderType.entityTranslucent(getRandomTexture(entity.getUUID())));
         getRenderer().render(normalModel, entity, partialTicks,
                 null, stack, null, consumer,

@@ -37,7 +37,7 @@ public class SkatesRenderer extends GeoArmorRenderer<SkateItem> {
     public void renderWithColor(float partialTicks, PoseStack stack, VertexConsumer bufferIn, int packedLightIn, float red, float green, float blue, float alpha) {
         stack.translate(0.0D, 24 / 16F, 0.0D);
         stack.scale(-1.0F, -1.0F, 1.0F);
-        GeoModel model = getGeoModelProvider().getModel(getGeoModelProvider().getModelLocation(currentArmorItem));
+        GeoModel model = getGeoModelProvider().getModel(getGeoModelProvider().getModelResource(currentArmorItem));
 
         AnimationEvent<SkateItem> itemEvent = new AnimationEvent<>(this.currentArmorItem, 0, 0, 0, false,
                 Arrays.asList(this.itemStack, this.entityLiving, this.armorSlot));

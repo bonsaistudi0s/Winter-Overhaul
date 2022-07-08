@@ -4,25 +4,26 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.cauldron.CauldronInteraction;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.EntityTypeTags;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.SnowGolem;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.world.BiomeLoadingEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -30,6 +31,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.Nullable;
 import tech.thatgravyboat.winteroverhaul.common.entity.IUpgradeAbleSnowGolem;
 import tech.thatgravyboat.winteroverhaul.common.entity.Robin;
 import tech.thatgravyboat.winteroverhaul.common.items.GolemUpgradeSlot;
@@ -55,31 +57,33 @@ public class WinterOverhaul {
         MinecraftForge.EVENT_BUS.register(this);
     }
 
-    @SubscribeEvent
-    public void onEntityRightClick(PlayerInteractEvent.EntityInteract event) {
-        Entity target = event.getTarget();
-        if (!(target instanceof SnowGolem snowGolem) || snowGolem.hasPumpkin()) return;
-        if (!(snowGolem instanceof IUpgradeAbleSnowGolem upgradeAbleSnowGolem)) return;
-        ItemStack stack = event.getItemStack();
+    @Nullable
+    public static InteractionResult onEntityRightClick(Entity target, Vec3 loc, ItemStack stack, Player player) {
+        if (!(target instanceof SnowGolem snowGolem) || snowGolem.hasPumpkin()) return null;
+        if (!(snowGolem instanceof IUpgradeAbleSnowGolem upgradeAbleSnowGolem)) return null;
         if (stack.is(Items.CARROT) || stack.is(Items.GOLDEN_CARROT)) {
             var oldItem = upgradeAbleSnowGolem.getGolemUpgradeInSlot(GolemUpgradeSlot.FACE);
-            if (!oldItem.isEmpty()) event.getPlayer().drop(oldItem, true);
+            if (!oldItem.isEmpty()) player.drop(oldItem, true);
             ItemStack newStack = stack.copy();
             newStack.setCount(1);
             upgradeAbleSnowGolem.setGolemUpgradeInSlot(GolemUpgradeSlot.FACE, newStack);
             stack.shrink(1);
-            event.setCancellationResult(InteractionResult.sidedSuccess(event.getPlayer().level.isClientSide));
-            event.setCanceled(true);
+            return InteractionResult.sidedSuccess(player.level.isClientSide);
         }
-        if (stack.isEmpty() && event.getPlayer().isShiftKeyDown()) {
-            for (GolemUpgradeSlot value : GolemUpgradeSlot.values()) {
-                ItemStack oldStack = upgradeAbleSnowGolem.setGolemUpgradeInSlot(value, ItemStack.EMPTY);
-                if (oldStack.isEmpty()) continue;
-                event.getPlayer().drop(oldStack, true);
+        if (stack.isEmpty() && player.isShiftKeyDown()) {
+            //Snow Golem height = 1.9
+            double y = loc.y;
+            ItemStack oldStack = ItemStack.EMPTY;
+            if (y >= 1.75) oldStack = upgradeAbleSnowGolem.setGolemUpgradeInSlot(GolemUpgradeSlot.HAT, ItemStack.EMPTY);
+            else if (y >= 1.50) oldStack = upgradeAbleSnowGolem.setGolemUpgradeInSlot(GolemUpgradeSlot.FACE, ItemStack.EMPTY);
+            else if ( y >= 1.35) oldStack = upgradeAbleSnowGolem.setGolemUpgradeInSlot(GolemUpgradeSlot.SCARF, ItemStack.EMPTY);
+
+            if (!oldStack.isEmpty()) {
+                target.spawnAtLocation(oldStack);
+                return InteractionResult.sidedSuccess(player.level.isClientSide);
             }
-            event.setCancellationResult(InteractionResult.sidedSuccess(event.getPlayer().level.isClientSide));
-            event.setCanceled(true);
         }
+        return null;
     }
 
     @SubscribeEvent
@@ -87,26 +91,15 @@ public class WinterOverhaul {
         if (!(event.getEntity() instanceof Mob mob)) return;
 
         EntityType<?> type = mob.getType();
+        if (type.is(EntityTypeTags.SKELETONS) || type.equals(EntityType.ZOMBIE)) {
+            Holder<Biome> biome = event.getWorld().getBiomeManager().getBiome(event.getEntity().blockPosition());
 
-        boolean isSkeleton = type.equals(EntityType.SKELETON) || type.equals(EntityType.STRAY);
-        boolean isZombie = type.equals(EntityType.ZOMBIE);
-
-        if (isSkeleton || isZombie) {
-            Holder<Biome> biome = event.getWorld().getBiomeManager().m_204214_(event.getEntity().blockPosition());
-
-            if (biome.m_203633_() && biome.m_203334_().getPrecipitation().equals(Biome.Precipitation.SNOW)) {
+            if (biome.isBound() && biome.value().getPrecipitation().equals(Biome.Precipitation.SNOW)) {
                 if (mob.getRandom().nextFloat() > 0.90f && mob.getRandom().nextFloat() > 0.5f){
                     Item item = getRandomHatAndScarf(mob.getRandom().nextInt(8));
                     mob.setItemSlot(EquipmentSlot.HEAD, new ItemStack(item));
                 }
             }
-        }
-    }
-
-    @SubscribeEvent(priority = EventPriority.HIGH)
-    public void addSpawns(BiomeLoadingEvent event) {
-        if (event.getCategory().equals(Biome.BiomeCategory.TAIGA) && event.getClimate().precipitation.equals(Biome.Precipitation.SNOW)) {
-            event.getSpawns().addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(ModEntities.ROBIN.get(), 25, 1, 2));
         }
     }
 
@@ -130,8 +123,8 @@ public class WinterOverhaul {
         SpawnPlacements.register(ModEntities.ROBIN.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING,
                 (entity, level, spawn, pos, random) -> {
                     BlockState state = level.getBlockState(pos.below());
-                    boolean isLeaves = state.m_204336_(BlockTags.LEAVES);
-                    boolean isSnow = state.m_204336_(BlockTags.SNOW);
+                    boolean isLeaves = state.is(BlockTags.LEAVES);
+                    boolean isSnow = state.is(BlockTags.SNOW);
                     boolean isGrass = state.is(Blocks.GRASS_BLOCK);
 
                     return (isLeaves || isSnow || isGrass || state.isAir()) && level.getRawBrightness(pos, 0) > 8;

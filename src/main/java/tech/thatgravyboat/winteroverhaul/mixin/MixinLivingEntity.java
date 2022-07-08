@@ -1,6 +1,7 @@
 package tech.thatgravyboat.winteroverhaul.mixin;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -29,14 +30,12 @@ public abstract class MixinLivingEntity extends Entity {
         boolean isIce = state.is(Blocks.ICE) || state.is(Blocks.BLUE_ICE) || state.is(Blocks.PACKED_ICE);
         //noinspection ConstantConditions
         boolean isWearingBoots = ((Object)this) instanceof LivingEntity livingEntity && livingEntity.getItemBySlot(EquipmentSlot.FEET).getItem() instanceof SkateItem;
-        //noinspection ConstantConditions
         if (isIce && isWearingBoots) cir.setReturnValue(1.05f);
     }
 
     @Redirect(method = "travel", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;getFriction(Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/Entity;)F"))
     private float onGetFriction(BlockState state, LevelReader level, BlockPos pos, Entity entity) {
-        boolean isIce = state.is(Blocks.ICE) || state.is(Blocks.BLUE_ICE) || state.is(Blocks.PACKED_ICE);
-        if (isIce && !entity.isSprinting() && entity instanceof LivingEntity livingEntity && livingEntity.getItemBySlot(EquipmentSlot.FEET).getItem() instanceof SkateItem) {
+        if (state.is(BlockTags.ICE) && !entity.isSprinting() && entity instanceof LivingEntity livingEntity && livingEntity.getItemBySlot(EquipmentSlot.FEET).getItem() instanceof SkateItem) {
             return 0.8F;
         }
         return state.getFriction(level, pos, entity);
