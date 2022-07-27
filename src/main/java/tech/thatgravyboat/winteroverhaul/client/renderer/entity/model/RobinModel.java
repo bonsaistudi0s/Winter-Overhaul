@@ -8,8 +8,6 @@ import software.bernie.geckolib3.model.provider.data.EntityModelData;
 import tech.thatgravyboat.winteroverhaul.WinterOverhaul;
 import tech.thatgravyboat.winteroverhaul.common.entity.Robin;
 
-import java.util.List;
-
 public class RobinModel extends AnimatedGeoModel<Robin> {
 
     @Override

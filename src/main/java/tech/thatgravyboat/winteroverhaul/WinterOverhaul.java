@@ -5,7 +5,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.cauldron.CauldronInteraction;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.EntityTypeTags;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.SnowGolem;
@@ -23,7 +22,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -88,11 +86,10 @@ public class WinterOverhaul {
 
     @SubscribeEvent
     public void onEntitySpawn(LivingSpawnEvent.CheckSpawn event) {
-        if (!(event.getEntity() instanceof Mob mob)) return;
-
+        Mob mob = event.getEntity();
         EntityType<?> type = mob.getType();
         if (type.is(EntityTypeTags.SKELETONS) || type.equals(EntityType.ZOMBIE)) {
-            Holder<Biome> biome = event.getWorld().getBiomeManager().getBiome(event.getEntity().blockPosition());
+            Holder<Biome> biome = event.getLevel().getBiomeManager().getBiome(event.getEntity().blockPosition());
 
             if (biome.isBound() && biome.value().getPrecipitation().equals(Biome.Precipitation.SNOW)) {
                 if (mob.getRandom().nextFloat() > 0.90f && mob.getRandom().nextFloat() > 0.5f){
@@ -105,7 +102,7 @@ public class WinterOverhaul {
 
     @SubscribeEvent
     public void onMobDrops(LivingDropsEvent event) {
-        LivingEntity livingEntity = event.getEntityLiving();
+        LivingEntity livingEntity = event.getEntity();
         if (livingEntity instanceof IUpgradeAbleSnowGolem golem) {
             for (GolemUpgradeSlot value : GolemUpgradeSlot.values()) {
                 ItemStack stack = golem.getGolemUpgradeInSlot(value);

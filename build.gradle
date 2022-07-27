@@ -16,7 +16,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '2.0.0'
+version = '2.0.1'
 group = 'tech.thatgravyboat.winteroverhaul'
 archivesBaseName = 'winteroverhaul'
 
@@ -82,9 +82,9 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19-41.0.64'
+    minecraft 'net.minecraftforge:forge:1.19-41.1.0'
 
-    implementation fg.deobf("software.bernie.geckolib:geckolib-forge-1.19:3.1.8")
+    implementation fg.deobf("software.bernie.geckolib:geckolib-forge-1.19:3.1.9")
     annotationProcessor 'org.spongepowered:mixin:0.8.5-SNAPSHOT:processor'
 }
 

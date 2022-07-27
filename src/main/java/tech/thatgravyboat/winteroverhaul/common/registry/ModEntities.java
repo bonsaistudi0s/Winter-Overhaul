@@ -10,7 +10,7 @@ import tech.thatgravyboat.winteroverhaul.common.entity.Robin;
 
 public class ModEntities {
 
-    public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, WinterOverhaul.MODID);
+    public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, WinterOverhaul.MODID);
 
     public static final RegistryObject<EntityType<Robin>> ROBIN = ENTITIES.register("robin",
             () -> EntityType.Builder.of(Robin::new, MobCategory.CREATURE).sized(0.5F, 0.9F).build("robin"));
