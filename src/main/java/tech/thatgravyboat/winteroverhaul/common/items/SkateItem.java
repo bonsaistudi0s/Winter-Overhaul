@@ -44,7 +44,7 @@ public class SkateItem extends ArmorItem implements IAnimatable, DyeableLeatherI
         consumer.accept(new IItemRenderProperties() {
             @Override
             public HumanoidModel<?> getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot armorSlot, HumanoidModel<?> _default) {
-                return (HumanoidModel<?>) GeoArmorRenderer.getRenderer(SkateItem.this.getClass()).applyEntityStats(_default)
+                return (HumanoidModel<?>) GeoArmorRenderer.getRenderer(SkateItem.this.getClass(), entityLiving).applyEntityStats(_default)
                         .applySlot(armorSlot).setCurrentItem(entityLiving, itemStack, armorSlot);
             }
         });
