@@ -1,0 +1,29 @@
+{
+  "itemGroup.winteroverhaul": "Winter Overhaul",
+
+  "item.winteroverhaul.skates": "Pattini da ghiaccio",
+  "item.winteroverhaul.yellow_scarf": "Sciarpa gialla",
+  "item.winteroverhaul.red_scarf": "Sciarpa rossa",
+  "item.winteroverhaul.cyan_scarf": "Sciarpa ciano",
+  "item.winteroverhaul.green_scarf": "Sciarpa verde",
+  "item.winteroverhaul.top_hat": "Cappello a cilindro",
+  "item.winteroverhaul.yellow_winter_hat": "Cappello invernale giallo",
+  "item.winteroverhaul.red_winter_hat": "Cappello invernale rosso",
+  "item.winteroverhaul.cyan_winter_hat": "Cappello invernale ciano",
+  "item.winteroverhaul.green_winter_hat": "Cappello invernale verde",
+
+  "item.winteroverhaul.upgrade.header": "Quando è equipaggiato ad un golem di neve:",
+  "item.winteroverhaul.yellow_winter_hat.desc": "Resistenza al fuoco",
+  "item.winteroverhaul.yellow_scarf.desc": "Resistenza al fuoco",
+  "item.winteroverhaul.red_scarf.desc": "x2 danno delle palle di neve",
+  "item.winteroverhaul.red_winter_hat.desc": "x2 danno delle palle di neve",
+  "item.winteroverhaul.cyan_scarf.desc": "2x velocità di lancio delle palle di neve",
+  "item.winteroverhaul.cyan_winter_hat.desc": "2x velocità di lancio delle palle di neve",
+  "item.winteroverhaul.green_scarf.desc": "x1,5 raggio di lancio delle palle di neve",
+  "item.winteroverhaul.green_winter_hat.desc": "x1,5 raggio di lancio delle palle di neve",
+  "item.winteroverhaul.top_hat.desc": "x2 salute massima e rigenerazione più veloce",
+
+  "subtitles.winteroverhaul.entity.robin.ambient": "Pettirosso cinguetta",
+  "item.winteroverhaul.robin_spawn_egg": "Uovo generatore di pettirosso",
+  "entity.winteroverhaul.robin": "Pettirosso"
+}
