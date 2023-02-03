@@ -1,0 +1,29 @@
+{
+  "itemGroup.winteroverhaul": "Inverno Melhorado",
+
+  "item.winteroverhaul.skates": "Patins de Gelo",
+  "item.winteroverhaul.yellow_scarf": "Cachecol Amarelo",
+  "item.winteroverhaul.red_scarf": "Cachecol Vermelho",
+  "item.winteroverhaul.cyan_scarf": "Cachecol Ciano",
+  "item.winteroverhaul.green_scarf": "Cachecol Verde",
+  "item.winteroverhaul.top_hat": "Cartola",
+  "item.winteroverhaul.yellow_winter_hat": "Gorro de Inverno Amarela",
+  "item.winteroverhaul.red_winter_hat": "Gorro de Inverno Vermelha",
+  "item.winteroverhaul.cyan_winter_hat": "Gorro de Inverno Ciano",
+  "item.winteroverhaul.green_winter_hat": "Gorro de Inverno Verde",
+
+  "item.winteroverhaul.upgrade.header": "Quando equipado no Snow Golem:",
+  "item.winteroverhaul.yellow_winter_hat.desc": "Resistência ao fogo",
+  "item.winteroverhaul.yellow_scarf.desc": "Resistência ao fogo",
+  "item.winteroverhaul.red_scarf.desc": "x2 Dano de Bola de Neve",
+  "item.winteroverhaul.red_winter_hat.desc": "x2 Dano de Bola de Neve",
+  "item.winteroverhaul.cyan_scarf.desc": "2x Velocidade de Arremesso de Bola de Neve",
+  "item.winteroverhaul.cyan_winter_hat.desc": "2x Velocidade de Arremesso de Bola de Neve",
+  "item.winteroverhaul.green_scarf.desc": "x1.5 Alcance de Arremesso de Bola de Neve",
+  "item.winteroverhaul.green_winter_hat.desc": "x1.5 Alcance de Arremesso de Bola de Neve",
+  "item.winteroverhaul.top_hat.desc": "x2 Saúde Máxima e Regeneração mais rápida",
+
+  "subtitles.winteroverhaul.entity.robin.ambient": "Tordo chilreia",
+  "item.winteroverhaul.robin_spawn_egg": "Invocar Tordo",
+  "entity.winteroverhaul.robin": "Tordo"
+}
