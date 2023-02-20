@@ -1,0 +1,29 @@
+{
+  "itemGroup.winteroverhaul": "Winter Overhaul",
+
+  "item.winteroverhaul.skates": "Ковзани",
+  "item.winteroverhaul.yellow_scarf": "Жовтий шарф",
+  "item.winteroverhaul.red_scarf": "Червоний шарф",
+  "item.winteroverhaul.cyan_scarf": "Бірюзовий шарф",
+  "item.winteroverhaul.green_scarf": "Зелений шарф",
+  "item.winteroverhaul.top_hat": "Ціліндр",
+  "item.winteroverhaul.yellow_winter_hat": "Жовта зимова шапка",
+  "item.winteroverhaul.red_winter_hat": "Червона зимова шапка",
+  "item.winteroverhaul.cyan_winter_hat": "Бірюзова зимова шапка",
+  "item.winteroverhaul.green_winter_hat": "Зелена зимова шапка",
+
+  "item.winteroverhaul.upgrade.header": "Коли споряджено на сніговому ґолемі:",
+  "item.winteroverhaul.yellow_winter_hat.desc": "Вогнестійкість",
+  "item.winteroverhaul.yellow_scarf.desc": "Вогнестійкість",
+  "item.winteroverhaul.red_scarf.desc": "x2 шкода від сніжки",
+  "item.winteroverhaul.red_winter_hat.desc": "x2 шкода від сніжки",
+  "item.winteroverhaul.cyan_scarf.desc": "2x швидкість кидання сніжки",
+  "item.winteroverhaul.cyan_winter_hat.desc": "2x швидкість кидання сніжки",
+  "item.winteroverhaul.green_scarf.desc": "x1.5 дальність кидання сніжки",
+  "item.winteroverhaul.green_winter_hat.desc": "x1.5 дальність кидання сніжки",
+  "item.winteroverhaul.top_hat.desc": "x2 максимального здоров'я та швидкість відновлювання",
+
+  "subtitles.winteroverhaul.entity.robin.ambient": "Вільшанка цвірінькає",
+  "item.winteroverhaul.robin_spawn_egg": "Яйце виклику вільшанки",
+  "entity.winteroverhaul.robin": "Вільшанка"
+}
