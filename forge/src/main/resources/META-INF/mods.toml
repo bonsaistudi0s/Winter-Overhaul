@@ -1,0 +1,32 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="All rights reserved"
+
+[[mods]]
+    modId="winteroverhaul"
+    version="${mod_version}"
+    displayName="Winter Overhaul"
+    logoFile="icon.png"
+    authors="Artist - Joosh, Dev - ThatGravyBoat"
+    description=""
+
+[[dependencies.winteroverhaul]]
+    modId="geckolib"
+    mandatory=true
+    versionRange="[${geckolib_version},)"
+    ordering="AFTER"
+    side="BOTH"
+
+[[dependencies.winteroverhaul]]
+    modId="forge"
+    mandatory=true
+    versionRange="[${forge_version},)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.winteroverhaul]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="${minecraft_version_forge}"
+    ordering="NONE"
+    side="BOTH"

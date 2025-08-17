@@ -1,0 +1,103 @@
+package tech.thatgravyboat.winteroverhaul.forge;
+
+import dev.architectury.platform.forge.EventBuses;
+import net.minecraft.core.MappedRegistry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.DataProvider;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.data.event.GatherDataEvent;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
+import net.minecraftforge.event.entity.living.LivingDropsEvent;
+import net.minecraftforge.event.entity.living.MobSpawnEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.level.LevelEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.RegisterEvent;
+import tech.thatgravyboat.winteroverhaul.WinterOverhaul;
+import tech.thatgravyboat.winteroverhaul.common.registry.ModEntities;
+import tech.thatgravyboat.winteroverhaul.common.registry.ModItems;
+import tech.thatgravyboat.winteroverhaul.common.registry.ModParticles;
+import tech.thatgravyboat.winteroverhaul.common.registry.ModSounds;
+import tech.thatgravyboat.winteroverhaul.common.util.BiomeSpawns;
+import tech.thatgravyboat.winteroverhaul.common.util.EntityAttributesBuilder;
+import tech.thatgravyboat.winteroverhaul.datagen.WinterOverhaulLootTableDatagen;
+import tech.thatgravyboat.winteroverhaul.datagen.WinterOverhaulRecipeDatagen;
+
+@Mod(WinterOverhaul.MODID)
+public class WinterOverhaulForge {
+    public static final WinterOverhaul MOD = new WinterOverhaul();
+    public static final CreativeModeTab TAB = CreativeModeTab.builder()
+        .displayItems((params, output) -> ModItems.registerToCreativeTab(output))
+        .title(Component.literal("Winter Overhaul"))
+        .icon(() -> new ItemStack(ModItems.TOP_HAT.get()))
+        .build();
+
+    private static final BiomeSpawns biomeSpawns = new BiomeSpawns();
+
+    public WinterOverhaulForge(FMLJavaModLoadingContext context) {
+        MinecraftForge.EVENT_BUS.register(this);
+        var modBus = context.getModEventBus();
+        modBus.register(WinterOverhaulForge.class);
+        EventBuses.registerModEventBus(WinterOverhaul.MODID, modBus);
+        MOD.register();
+    }
+
+    @SubscribeEvent
+    public void onEntityRightClick(PlayerInteractEvent.EntityInteract event) {
+        InteractionResult result = MOD.onEntityRightClick(event.getTarget(), event.getItemStack(), event.getEntity());
+        if (result != InteractionResult.PASS) {
+            event.setCancellationResult(result);
+            event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent
+    public void onEntitySpawn(MobSpawnEvent.PositionCheck event) {
+        MOD.onEntitySpawn(event.getEntity(), event.getLevel());
+    }
+
+    @SubscribeEvent
+    public void onAddSpawns(LevelEvent.PotentialSpawns potentialSpawns) {
+        if (biomeSpawns.getSpawns().isEmpty())
+            MOD.addSpawns(biomeSpawns);
+
+        for (BiomeSpawns.SpawnData spawn : biomeSpawns.getSpawns()) {
+            if (potentialSpawns.getMobCategory() == spawn.category() && spawn.selector().test(potentialSpawns.getLevel().getBiome(potentialSpawns.getPos()))) {
+                potentialSpawns.addSpawnerData(spawn.spawnerData());
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void addAttributes(EntityAttributeCreationEvent event) {
+        var builder = new EntityAttributesBuilder();
+        MOD.addAttributes(builder);
+
+        builder.getAttributeSupplierMap().forEach(event::put);
+    }
+
+    @SubscribeEvent
+    public static void onComplete(FMLLoadCompleteEvent event) {
+        MOD.onComplete();
+    }
+
+    @SubscribeEvent
+    public void onMobDrops(LivingDropsEvent event) {
+        MOD.onMobDrops(event.getEntity(), event.getDrops());
+    }
+
+    @SubscribeEvent
+    public static void onDataGeneration(GatherDataEvent event) {
+        event.getGenerator().addProvider(event.includeServer(), (DataProvider.Factory<WinterOverhaulRecipeDatagen>) WinterOverhaulRecipeDatagen::new);
+        event.getGenerator().addProvider(event.includeServer(), (DataProvider.Factory<WinterOverhaulLootTableDatagen>) WinterOverhaulLootTableDatagen::new);
+    }
+}

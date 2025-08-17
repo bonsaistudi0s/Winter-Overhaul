@@ -1,0 +1,39 @@
+{
+    "schemaVersion": 1,
+    "id": "winteroverhaul",
+    "version": "${mod_version}",
+    "name": "Winter Overhaul",
+    "description": "Developed for MMD 2021 WinterJam, Winter Overhaul will update Minecraft's snowy biomes with new winter-related features!",
+    "authors": [
+        "Joosh",
+        "ThatGravyBoat",
+        "BluSpring"
+    ],
+    "contact": {
+        "sources": "https://github.com/bonsaistudi0s/Winter-Overhaul",
+        "issues": "https://github.com/bonsaistudi0s/Winter-Overhaul/issues"
+    },
+    "license": "MIT",
+    "icon": "icon.png",
+    "environment": "*",
+    "entrypoints": {
+        "main": [
+            "tech.thatgravyboat.winteroverhaul.fabric.WinterOverhaulFabric"
+        ],
+        "client": [
+            "tech.thatgravyboat.winteroverhaul.fabric.client.WinterOverhaulFabricClient"
+        ],
+        "fabric-datagen": [
+            "tech.thatgravyboat.winteroverhaul.fabric.datagen.WinterOverhaulFabricDatagen"
+        ]
+    },
+    "mixins": [
+        "winteroverhaul.mixins.json",
+        "winteroverhaul.fabric.mixins.json"
+    ],
+    "depends": {
+        "fabricloader": ">=${fabric_loader_version}",
+        "fabric-api": ">=${fabric_api_version}",
+        "minecraft": "${minecraft_version}"
+    }
+}

@@ -1,0 +1,33 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "get_wool": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "minecraft:wool"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "winteroverhaul:red_winter_hat"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "get_wool",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "winteroverhaul:red_winter_hat"
+    ]
+  },
+  "sends_telemetry_event": false
+}
