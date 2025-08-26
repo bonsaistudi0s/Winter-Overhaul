@@ -44,7 +44,7 @@ public class ModItems {
     }
 
     public static void registerToCreativeTab(CreativeModeTab.Output output) {
-        output.accept(YELLOW_HAT.get());
+        output.accept(YELLOW_SCARF.get());
         output.accept(RED_SCARF.get());
         output.accept(CYAN_SCARF.get());
         output.accept(GREEN_SCARF.get());
@@ -53,6 +53,7 @@ public class ModItems {
         output.accept(RED_HAT.get());
         output.accept(CYAN_HAT.get());
         output.accept(GREEN_HAT.get());
+
         output.accept(TOP_HAT.get());
         output.accept(ROBIN_SPAWN_EGG.get());
         output.accept(SKATES.get());
