@@ -57,7 +57,7 @@ dependencies {
     modImplementation("dev.architectury:architectury-forge:${rootProject.property("architectury_version")}")
 
     common(project(path = ":common", configuration = "namedElements")) { isTransitive = false }
-    shadowCommon(project(path = ":common", configuration = "transformProductionFabric")) { isTransitive = false }
+    shadowCommon(project(path = ":common", configuration = "transformProductionForge")) { isTransitive = false }
 
     // Forge doesn't bundle MixinExtras, so we should include it.
     compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.5.0")!!)
