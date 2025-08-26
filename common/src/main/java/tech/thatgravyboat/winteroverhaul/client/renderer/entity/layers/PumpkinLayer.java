@@ -15,7 +15,7 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import software.bernie.geckolib.cache.object.BakedGeoModel;
+import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 import tech.thatgravyboat.winteroverhaul.client.renderer.entity.ReplacedSnowGolemRenderer;
 import tech.thatgravyboat.winteroverhaul.common.entity.ReplacedSnowGolem;
@@ -29,11 +29,10 @@ public class PumpkinLayer extends GeoRenderLayer<ReplacedSnowGolem> {
     }
 
 
-
     @Override
-    public void render(PoseStack stack, ReplacedSnowGolem animatable, BakedGeoModel bakedModel, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
+    public void renderForBone(PoseStack stack, ReplacedSnowGolem animatable, GeoBone bone, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
         SnowGolem golem = this.renderer.getCurrentEntity();
-        if (golem.hasPumpkin()) {
+        if (golem.hasPumpkin() && bone.getName().equals("head")) {
             Minecraft minecraft = Minecraft.getInstance();
             boolean flag = minecraft.shouldEntityAppearGlowing(golem) && golem.isInvisible();
             if (!golem.isInvisible() || flag) {
