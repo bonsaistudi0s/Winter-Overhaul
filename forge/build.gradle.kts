@@ -70,7 +70,8 @@ tasks {
             "mod_version" to rootProject.property("mod_version"),
             "minecraft_version_forge" to rootProject.property("minecraft_version_forge"),
             "geckolib_version" to rootProject.property("geckolib_version"),
-            "forge_version" to rootProject.property("forge_version")
+            "forge_version" to rootProject.property("forge_version"),
+            "architectury_version" to rootProject.property("architectury_version")
         )
     }
 

@@ -50,7 +50,8 @@ tasks {
             "geckolib_version" to rootProject.property("geckolib_version"),
 
             "fabric_loader_version" to rootProject.property("fabric_loader_version"),
-            "fabric_api_version" to rootProject.property("fabric_api_version")
+            "fabric_api_version" to rootProject.property("fabric_api_version"),
+            "architectury_version" to rootProject.property("architectury_version")
         )
     }
 
