@@ -21,7 +21,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegisterEvent;
+import net.minecraftforge.registries.RegistryObject;
 import tech.thatgravyboat.winteroverhaul.WinterOverhaul;
 import tech.thatgravyboat.winteroverhaul.common.registry.ModEntities;
 import tech.thatgravyboat.winteroverhaul.common.registry.ModItems;
@@ -35,11 +37,12 @@ import tech.thatgravyboat.winteroverhaul.datagen.WinterOverhaulRecipeDatagen;
 @Mod(WinterOverhaul.MODID)
 public class WinterOverhaulForge {
     public static final WinterOverhaul MOD = new WinterOverhaul();
-    public static final CreativeModeTab TAB = CreativeModeTab.builder()
+    private static final DeferredRegister<CreativeModeTab> TAB_REGISTER = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, WinterOverhaul.MODID);
+    public static final RegistryObject<CreativeModeTab> TAB = TAB_REGISTER.register("tab", () -> CreativeModeTab.builder()
         .displayItems((params, output) -> ModItems.registerToCreativeTab(output))
         .title(Component.literal("Winter Overhaul"))
         .icon(() -> new ItemStack(ModItems.TOP_HAT.get()))
-        .build();
+        .build());
 
     private static final BiomeSpawns biomeSpawns = new BiomeSpawns();
 
@@ -49,6 +52,7 @@ public class WinterOverhaulForge {
         modBus.register(WinterOverhaulForge.class);
         EventBuses.registerModEventBus(WinterOverhaul.MODID, modBus);
         MOD.register();
+        TAB_REGISTER.register(modBus);
     }
 
     @SubscribeEvent

@@ -7,6 +7,8 @@ import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
@@ -26,6 +28,7 @@ public class WinterOverhaulFabric implements ModInitializer {
     @Override
     public void onInitialize() {
         MOD.register();
+        Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, WinterOverhaul.id("tab"), TAB);
 
         UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) ->
             MOD.onEntityRightClick(entity, player.getItemInHand(hand), player));
