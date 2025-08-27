@@ -1,6 +1,7 @@
 package tech.thatgravyboat.winteroverhaul.client.renderer.entity.model;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
 import software.bernie.geckolib.core.animation.AnimationState;
@@ -39,10 +40,10 @@ public class ReplacedSnowGolemModel<E extends ReplacedSnowGolem> extends GeoMode
         EntityModelData extraData = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
 
         CoreGeoBone head = this.getAnimationProcessor().getBone("head");
-        head.setRotY(extraData.netHeadYaw() * ((float)Math.PI / 180F));
-        head.setRotX(extraData.headPitch() * ((float)Math.PI / 180F));
+        head.setRotY(extraData.netHeadYaw() * Mth.DEG_TO_RAD);
+        head.setRotX(extraData.headPitch() * Mth.DEG_TO_RAD);
         CoreGeoBone upperBody = this.getAnimationProcessor().getBone("body_2");
-        upperBody.setRotY(extraData.netHeadYaw() * ((float)Math.PI / 180F) * 0.25F);
+        upperBody.setRotY(extraData.netHeadYaw() * Mth.DEG_TO_RAD * 0.25F);
 //        float sinRotY = Mth.sin(upperBody.getRotationY());
 //        float cosRotY = Mth.cos(upperBody.getRotationY());
 //        IBone leftArm = this.getAnimationProcessor().getBone("left_arm");

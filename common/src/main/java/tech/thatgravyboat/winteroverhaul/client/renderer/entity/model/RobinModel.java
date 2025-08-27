@@ -1,6 +1,7 @@
 package tech.thatgravyboat.winteroverhaul.client.renderer.entity.model;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.model.GeoModel;
@@ -32,7 +33,7 @@ public class RobinModel extends GeoModel<Robin> {
 
         EntityModelData extraDataOfType = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
         var head = this.getAnimationProcessor().getBone("head");
-        head.setRotX((extraDataOfType.headPitch() * ((float)Math.PI / 180F))-0.261799f);
-        head.setRotY(extraDataOfType.netHeadYaw() * ((float)Math.PI / 180F));
+        head.setRotX((extraDataOfType.headPitch() * Mth.DEG_TO_RAD - 0.261799f));
+        head.setRotY(extraDataOfType.netHeadYaw() * Mth.DEG_TO_RAD);
     }
 }
