@@ -1,14 +1,15 @@
 package tech.thatgravyboat.winteroverhaul.forge;
 
 import dev.architectury.platform.forge.EventBuses;
-import net.minecraft.core.MappedRegistry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.RegisterColorHandlersEvent;
+import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
@@ -16,19 +17,16 @@ import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.LevelEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegisterEvent;
 import net.minecraftforge.registries.RegistryObject;
 import tech.thatgravyboat.winteroverhaul.WinterOverhaul;
-import tech.thatgravyboat.winteroverhaul.common.registry.ModEntities;
+import tech.thatgravyboat.winteroverhaul.client.ModClient;
 import tech.thatgravyboat.winteroverhaul.common.registry.ModItems;
-import tech.thatgravyboat.winteroverhaul.common.registry.ModParticles;
-import tech.thatgravyboat.winteroverhaul.common.registry.ModSounds;
 import tech.thatgravyboat.winteroverhaul.common.util.BiomeSpawns;
 import tech.thatgravyboat.winteroverhaul.common.util.EntityAttributesBuilder;
 import tech.thatgravyboat.winteroverhaul.datagen.WinterOverhaulLootTableDatagen;
@@ -97,6 +95,21 @@ public class WinterOverhaulForge {
     @SubscribeEvent
     public void onMobDrops(LivingDropsEvent event) {
         MOD.onMobDrops(event.getEntity(), event.getDrops());
+    }
+
+    @SubscribeEvent
+    public static void onClientSetup(EntityRenderersEvent.RegisterRenderers event) {
+        ModClient.setupEntityRenderers();
+    }
+
+    @SubscribeEvent
+    public static void onRegisterParticles(RegisterParticleProvidersEvent event) {
+        ModClient.setupParticles();
+    }
+
+    @SubscribeEvent
+    public static void onItemColors(RegisterColorHandlersEvent.Item event) {
+        ModClient.onItemColors();
     }
 
     @SubscribeEvent
