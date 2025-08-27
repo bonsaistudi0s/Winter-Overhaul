@@ -14,6 +14,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.LevelEvent;
@@ -95,6 +96,13 @@ public class WinterOverhaulForge {
     @SubscribeEvent
     public void onMobDrops(LivingDropsEvent event) {
         MOD.onMobDrops(event.getEntity(), event.getDrops());
+    }
+
+    @SubscribeEvent
+    public void onEntityDamage(LivingHurtEvent event) {
+        if (MOD.onEntityDamage(event.getEntity(), event.getSource())) {
+            event.setCanceled(true);
+        }
     }
 
     @SubscribeEvent

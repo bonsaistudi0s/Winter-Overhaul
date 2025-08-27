@@ -7,12 +7,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.DefaultAttributes;
 import net.minecraft.world.entity.animal.SnowGolem;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Snowball;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -110,6 +112,14 @@ public class WinterOverhaul {
                 if (!stack.isEmpty()) drops.add(new ItemEntity(livingEntity.level(), pos.getX(), pos.getY(), pos.getZ(), stack.copy()));
             }
         }
+    }
+
+    public boolean onEntityDamage(Entity entity, DamageSource source) {
+        if (entity instanceof SnowGolem && source.getDirectEntity() instanceof Snowball) {
+            return true;
+        }
+
+        return false;
     }
 
     public void addAttributes(EntityAttributesBuilder builder) {

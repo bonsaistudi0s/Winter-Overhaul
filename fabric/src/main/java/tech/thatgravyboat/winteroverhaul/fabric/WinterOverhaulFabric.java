@@ -49,6 +49,14 @@ public class WinterOverhaulFabric implements ModInitializer {
                 });
         }
 
+        ServerLivingEntityEvents.ALLOW_DAMAGE.register((entity, source, amount) -> {
+            if (MOD.onEntityDamage(entity, source)) {
+                return false;
+            }
+
+            return true;
+        });
+
         MOD.onComplete();
     }
 }
