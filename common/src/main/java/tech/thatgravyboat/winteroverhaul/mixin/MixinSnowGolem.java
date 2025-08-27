@@ -1,12 +1,14 @@
 package tech.thatgravyboat.winteroverhaul.mixin;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
@@ -21,13 +23,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import tech.thatgravyboat.winteroverhaul.common.entity.GolemAttackableTargetGoal;
 import tech.thatgravyboat.winteroverhaul.common.entity.GolemRangedAttackGoal;
 import tech.thatgravyboat.winteroverhaul.common.entity.ISnowGolemSnowball;
@@ -37,25 +37,33 @@ import tech.thatgravyboat.winteroverhaul.common.items.GolemUpgradeSlot;
 import tech.thatgravyboat.winteroverhaul.common.registry.ModItems;
 import tech.thatgravyboat.winteroverhaul.common.registry.ModParticles;
 
-import java.util.stream.IntStream;
-
 @Mixin(SnowGolem.class)
 public abstract class MixinSnowGolem extends Mob implements IUpgradeAbleSnowGolem {
 
     @Unique
-    private final NonNullList<ItemStack> upgrades = NonNullList.withSize(GolemUpgradeSlot.values().length, ItemStack.EMPTY);
+    private final NonNullList<ItemStack> winteroverhaul_upgrades = NonNullList.withSize(GolemUpgradeSlot.values().length, ItemStack.EMPTY);
+
+    @Unique private static final EntityDataAccessor<ItemStack> WINTEROVERHAUL_HAT = SynchedEntityData.defineId(SnowGolem.class, EntityDataSerializers.ITEM_STACK);
+    @Unique private static final EntityDataAccessor<ItemStack> WINTEROVERHAUL_FACE = SynchedEntityData.defineId(SnowGolem.class, EntityDataSerializers.ITEM_STACK);
+    @Unique private static final EntityDataAccessor<ItemStack> WINTEROVERHAUL_SCARF = SynchedEntityData.defineId(SnowGolem.class, EntityDataSerializers.ITEM_STACK);
 
     protected MixinSnowGolem(EntityType<? extends Mob> p_21368_, Level p_21369_) {
         super(p_21368_, p_21369_);
     }
 
+    @Inject(method = "defineSynchedData", at = @At("TAIL"))
+    private void registerWinterOverhaulData(CallbackInfo ci) {
+        this.getEntityData().define(WINTEROVERHAUL_HAT, ItemStack.EMPTY);
+        this.getEntityData().define(WINTEROVERHAUL_FACE, ItemStack.EMPTY);
+        this.getEntityData().define(WINTEROVERHAUL_SCARF, ItemStack.EMPTY);
+    }
 
     @Inject(method = "aiStep", at = @At("HEAD"))
     private void onAiStep(CallbackInfo ci) {
         SnowGolem golem = (SnowGolem) ((Object)this);
         if (!golem.level().isClientSide) {
-            if (upgrades != null) {
-                upgrades.forEach(stack -> {
+            if (winteroverhaul_upgrades != null) {
+                winteroverhaul_upgrades.forEach(stack -> {
                     if (stack.getItem() instanceof GolemUpgradeItem upgradeItem) upgradeItem.tick(stack, golem);
                 });
             }
@@ -78,8 +86,8 @@ public abstract class MixinSnowGolem extends Mob implements IUpgradeAbleSnowGole
         this.targetSelector.addGoal(1, new GolemAttackableTargetGoal<>(this, Mob.class, 10, true, false, entity -> entity instanceof Enemy));
     }
 
-    @Inject(method = "performRangedAttack", locals = LocalCapture.CAPTURE_FAILHARD, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;getEyeY()D"))
-    private void onSnowballCreation(LivingEntity pTarget, float pDistanceFactor, CallbackInfo ci, Snowball snowball) {
+    @Inject(method = "performRangedAttack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;getEyeY()D"))
+    private void onSnowballCreation(LivingEntity pTarget, float pDistanceFactor, CallbackInfo ci, @Local Snowball snowball) {
         if (snowball instanceof ISnowGolemSnowball snowGolemSnowball) {
             snowGolemSnowball.winteroverhaul_setGolemSnowball(true);
             Item scraf = getGolemUpgradeInSlot(GolemUpgradeSlot.SCARF).getItem();
@@ -100,12 +108,14 @@ public abstract class MixinSnowGolem extends Mob implements IUpgradeAbleSnowGole
     @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
     private void onSaveNbt(CompoundTag pCompound, CallbackInfo ci) {
         ListTag listtag = new ListTag();
-        if (upgrades != null) {
-            for (ItemStack itemstack : this.upgrades) {
+        if (winteroverhaul_upgrades != null) {
+            for (ItemStack itemstack : this.winteroverhaul_upgrades) {
                 CompoundTag compoundtag = new CompoundTag();
                 if (!itemstack.isEmpty()) itemstack.save(compoundtag);
                 listtag.add(compoundtag);
             }
+
+            winteroverhaul_updateUpgrades();
         }
         pCompound.put("GolemUpgrades", listtag);
     }
@@ -114,24 +124,40 @@ public abstract class MixinSnowGolem extends Mob implements IUpgradeAbleSnowGole
     private void onLoadNbt(CompoundTag pCompound, CallbackInfo ci) {
         if (pCompound.contains("GolemUpgrades", Tag.TAG_LIST)) {
             ListTag listtag = pCompound.getList("GolemUpgrades", Tag.TAG_COMPOUND);
-            if (upgrades != null) {
-                for (int i = 0; i < this.upgrades.size(); ++i) {
+            if (winteroverhaul_upgrades != null) {
+                for (int i = 0; i < this.winteroverhaul_upgrades.size(); ++i) {
                     CompoundTag itemTag = listtag.getCompound(i);
-                    if (!itemTag.isEmpty()) this.upgrades.set(i, ItemStack.of(itemTag));
+                    if (!itemTag.isEmpty()) this.winteroverhaul_upgrades.set(i, ItemStack.of(itemTag));
                 }
+
+                winteroverhaul_updateUpgrades();
             }
         }
     }
 
     @Override
     public ItemStack setGolemUpgradeInSlot(GolemUpgradeSlot slot, ItemStack stack) {
-        if (upgrades == null) return ItemStack.EMPTY;
-        return upgrades.set(slot.index, stack);
+        if (winteroverhaul_upgrades == null) return ItemStack.EMPTY;
+        winteroverhaul_updateUpgrades();
+        return winteroverhaul_upgrades.set(slot.index, stack);
     }
 
     @Override
     public ItemStack getGolemUpgradeInSlot(GolemUpgradeSlot slot) {
-        if (upgrades == null) return ItemStack.EMPTY;
-        return upgrades.get(slot.index);
+        return switch (slot) {
+            case HAT -> this.getEntityData().get(WINTEROVERHAUL_HAT);
+            case FACE -> this.getEntityData().get(WINTEROVERHAUL_FACE);
+            case SCARF -> this.getEntityData().get(WINTEROVERHAUL_SCARF);
+        };
+    }
+
+    @Unique
+    private void winteroverhaul_updateUpgrades() {
+        if (winteroverhaul_upgrades == null)
+            return;
+
+        this.getEntityData().set(WINTEROVERHAUL_HAT, winteroverhaul_upgrades.get(GolemUpgradeSlot.HAT.index));
+        this.getEntityData().set(WINTEROVERHAUL_FACE, winteroverhaul_upgrades.get(GolemUpgradeSlot.FACE.index));
+        this.getEntityData().set(WINTEROVERHAUL_SCARF, winteroverhaul_upgrades.get(GolemUpgradeSlot.SCARF.index));
     }
 }
