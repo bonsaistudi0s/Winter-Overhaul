@@ -37,10 +37,10 @@ public class PumpkinLayer extends GeoRenderLayer<ReplacedSnowGolem> {
             boolean flag = minecraft.shouldEntityAppearGlowing(golem) && golem.isInvisible();
             if (!golem.isInvisible() || flag) {
                 stack.pushPose();
-                stack.translate(0.0D, 1.65625D, 0.0D);
+                stack.translate(0.0D, 1.6D, 0.0D);
                 stack.mulPose(Axis.YP.rotationDegrees(180.0F));
                 stack.mulPose(Axis.ZP.rotationDegrees(180.0F));
-                stack.scale(0.6875F, -0.6875F, -0.6875F);
+                stack.scale(0.6F, -0.6F, -0.6F);
                 if (flag) {
                     BlockState blockstate = Blocks.CARVED_PUMPKIN.defaultBlockState();
                     BlockRenderDispatcher blockrenderdispatcher = minecraft.getBlockRenderer();
