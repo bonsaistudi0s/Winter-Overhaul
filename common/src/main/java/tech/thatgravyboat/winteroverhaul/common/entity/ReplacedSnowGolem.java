@@ -9,8 +9,8 @@ import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 public class ReplacedSnowGolem implements GeoReplacedEntity {
-    protected static final RawAnimation WALK = RawAnimation.begin().thenLoop("animation.snow_golem.walk");
-    protected static final RawAnimation IDLE = RawAnimation.begin().thenLoop("animation.snow_golem.idle");
+    protected static final RawAnimation WALK = RawAnimation.begin().thenLoop("walk");
+    protected static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
