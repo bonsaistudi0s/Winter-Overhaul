@@ -23,7 +23,7 @@ public abstract class MixinLivingEntity extends Entity {
     @Inject(method = "getBlockSpeedFactor", at = @At("HEAD"), cancellable = true)
     private void onGetBlockSpeedFactor(CallbackInfoReturnable<Float> cir) {
         BlockState state = this.level().getBlockState(this.getBlockPosBelowThatAffectsMyMovement());
-        boolean isIce = state.is(Blocks.ICE) || state.is(Blocks.BLUE_ICE) || state.is(Blocks.PACKED_ICE);
+        boolean isIce = state.is(BlockTags.ICE);
         //noinspection ConstantConditions
         boolean isWearingBoots = (Object)this instanceof LivingEntity livingEntity && livingEntity.getItemBySlot(EquipmentSlot.FEET).getItem() instanceof SkateItem;
         if (isIce && isWearingBoots) cir.setReturnValue(1.05f);
