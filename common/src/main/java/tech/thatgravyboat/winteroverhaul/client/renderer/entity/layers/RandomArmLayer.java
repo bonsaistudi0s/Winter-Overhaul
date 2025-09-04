@@ -26,7 +26,7 @@ public class RandomArmLayer extends GeoRenderLayer<ReplacedSnowGolem> {
     private static final ResourceLocation[] TEXTURES = Util.make(() -> {
         ResourceLocation[] textures = new ResourceLocation[SIZE];
         for (int i = 0; i < SIZE; i++) {
-            textures[i] = new ResourceLocation(WinterOverhaul.MODID, "textures/entity/arms/snow_golem_arms_"+(i+1)+".png");
+            textures[i] = WinterOverhaul.id("textures/entity/arms/snow_golem_arms_"+(i+1)+".png");
         }
         return textures;
     });
@@ -46,7 +46,7 @@ public class RandomArmLayer extends GeoRenderLayer<ReplacedSnowGolem> {
         getRenderer().reRender(bakedModel, stack, bufferSource, entity, renderType1,
                 bufferSource.getBuffer(renderType1), partialTicks,
                 packedLightIn, OverlayTexture.NO_OVERLAY,
-                1f, 1f, 1f, 1f);
+                0xFFFFFFFF);
     }
 
     private ResourceLocation getRandomTexture(UUID uuid) {

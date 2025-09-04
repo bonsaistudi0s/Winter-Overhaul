@@ -18,7 +18,7 @@ public abstract class MobMixin extends LivingEntity {
     }
 
     @Inject(method = "finalizeSpawn", at = @At("TAIL"))
-    private void handleEntitySpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, SpawnGroupData spawnData, CompoundTag dataTag, CallbackInfoReturnable<SpawnGroupData> cir) {
+    private void handleEntitySpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, SpawnGroupData spawnGroupData, CallbackInfoReturnable<SpawnGroupData> cir) {
         WinterOverhaulFabric.MOD.onEntitySpawn(this, level);
     }
 }

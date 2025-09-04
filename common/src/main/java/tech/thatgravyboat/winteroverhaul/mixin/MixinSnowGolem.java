@@ -52,10 +52,10 @@ public abstract class MixinSnowGolem extends Mob implements IUpgradeAbleSnowGole
     }
 
     @Inject(method = "defineSynchedData", at = @At("TAIL"))
-    private void registerWinterOverhaulData(CallbackInfo ci) {
-        this.getEntityData().define(WINTEROVERHAUL_HAT, ItemStack.EMPTY);
-        this.getEntityData().define(WINTEROVERHAUL_FACE, ItemStack.EMPTY);
-        this.getEntityData().define(WINTEROVERHAUL_SCARF, ItemStack.EMPTY);
+    private void registerWinterOverhaulData(SynchedEntityData.Builder builder, CallbackInfo ci) {
+        builder.define(WINTEROVERHAUL_HAT, ItemStack.EMPTY);
+        builder.define(WINTEROVERHAUL_FACE, ItemStack.EMPTY);
+        builder.define(WINTEROVERHAUL_SCARF, ItemStack.EMPTY);
     }
 
     @Inject(method = "aiStep", at = @At("HEAD"))
@@ -110,9 +110,10 @@ public abstract class MixinSnowGolem extends Mob implements IUpgradeAbleSnowGole
         ListTag listtag = new ListTag();
         if (winteroverhaul_upgrades != null) {
             for (ItemStack itemstack : this.winteroverhaul_upgrades) {
-                CompoundTag compoundtag = new CompoundTag();
-                if (!itemstack.isEmpty()) itemstack.save(compoundtag);
-                listtag.add(compoundtag);
+                if (!itemstack.isEmpty())
+                    listtag.add(itemstack.save(this.registryAccess()));
+                else
+                    listtag.add(new CompoundTag());
             }
 
             winteroverhaul_updateUpgrades();
@@ -127,7 +128,7 @@ public abstract class MixinSnowGolem extends Mob implements IUpgradeAbleSnowGole
             if (winteroverhaul_upgrades != null) {
                 for (int i = 0; i < this.winteroverhaul_upgrades.size(); ++i) {
                     CompoundTag itemTag = listtag.getCompound(i);
-                    if (!itemTag.isEmpty()) this.winteroverhaul_upgrades.set(i, ItemStack.of(itemTag));
+                    if (!itemTag.isEmpty()) this.winteroverhaul_upgrades.set(i, ItemStack.parseOptional(this.registryAccess(), itemTag));
                 }
 
                 winteroverhaul_updateUpgrades();

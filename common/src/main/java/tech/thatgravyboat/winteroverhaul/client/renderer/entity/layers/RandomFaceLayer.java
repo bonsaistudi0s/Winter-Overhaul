@@ -25,7 +25,7 @@ public class RandomFaceLayer extends GeoRenderLayer<ReplacedSnowGolem> {
     private static final ResourceLocation[] TEXTURES = Util.make(() -> {
         ResourceLocation[] textures = new ResourceLocation[SIZE];
         for (int i = 0; i < SIZE; i++) {
-            textures[i] = new ResourceLocation(WinterOverhaul.MODID, "textures/entity/faces/snow_golem_face_"+(i+1)+".png");
+            textures[i] = WinterOverhaul.id("textures/entity/faces/snow_golem_face_"+(i+1)+".png");
         }
         return textures;
     });
@@ -47,7 +47,7 @@ public class RandomFaceLayer extends GeoRenderLayer<ReplacedSnowGolem> {
         getRenderer().reRender(bakedModel, poseStack, bufferSource,
                 animatable, renderType1, consumer, partialTick,
                 packedLight, packedOverlay,
-                1f, 1f, 1f, 1f);
+                0xFFFFFFFF);
     }
 
     private ResourceLocation getRandomTexture(UUID uuid) {

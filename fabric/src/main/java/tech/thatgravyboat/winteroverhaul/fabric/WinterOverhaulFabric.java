@@ -19,16 +19,10 @@ import tech.thatgravyboat.winteroverhaul.common.util.EntityAttributesBuilder;
 
 public class WinterOverhaulFabric implements ModInitializer {
     public static final WinterOverhaul MOD = new WinterOverhaul();
-    public static final CreativeModeTab TAB = FabricItemGroup.builder()
-        .displayItems((params, output) -> ModItems.registerToCreativeTab(output))
-        .title(Component.literal("Winter Overhaul"))
-        .icon(() -> new ItemStack(ModItems.TOP_HAT.get()))
-        .build();
 
     @Override
     public void onInitialize() {
         MOD.register();
-        Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, WinterOverhaul.id("tab"), TAB);
 
         UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) ->
             MOD.onEntityRightClick(entity, player.getItemInHand(hand), player));

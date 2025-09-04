@@ -13,5 +13,5 @@ public class ModSounds {
     public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(WinterOverhaul.MODID, Registries.SOUND_EVENT);
 
     public static final RegistrySupplier<SoundEvent> ROBIN_AMBIENT = SOUNDS.register("entity.robin.ambient",
-            () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(WinterOverhaul.MODID, "entity.robin.ambient")));
+            () -> SoundEvent.createVariableRangeEvent(WinterOverhaul.id("entity.robin.ambient")));
 }

@@ -2,9 +2,9 @@ package tech.thatgravyboat.winteroverhaul.client.renderer.entity.model;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.constant.DataTickets;
-import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
-import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 import tech.thatgravyboat.winteroverhaul.WinterOverhaul;
@@ -12,9 +12,9 @@ import tech.thatgravyboat.winteroverhaul.common.entity.ReplacedSnowGolem;
 
 public class ReplacedSnowGolemModel<E extends ReplacedSnowGolem> extends GeoModel<E> {
 
-    private static final ResourceLocation BASE_TEXTURE = new ResourceLocation(WinterOverhaul.MODID, "textures/entity/snow_golem.png");
-    private static final ResourceLocation MODEL = new ResourceLocation(WinterOverhaul.MODID, "geo/snow_golem.geo.json");
-    private static final ResourceLocation ANIMATION = new ResourceLocation(WinterOverhaul.MODID, "animations/snow_golem.animation.json");
+    private static final ResourceLocation BASE_TEXTURE = WinterOverhaul.id("textures/entity/snow_golem.png");
+    private static final ResourceLocation MODEL = WinterOverhaul.id("geo/snow_golem.geo.json");
+    private static final ResourceLocation ANIMATION = WinterOverhaul.id("animations/snow_golem.animation.json");
 
     @Override
     public ResourceLocation getModelResource(E animatable) {
@@ -39,10 +39,10 @@ public class ReplacedSnowGolemModel<E extends ReplacedSnowGolem> extends GeoMode
 
         EntityModelData extraData = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
 
-        CoreGeoBone head = this.getAnimationProcessor().getBone("head");
+        GeoBone head = this.getAnimationProcessor().getBone("head");
         head.setRotY(extraData.netHeadYaw() * Mth.DEG_TO_RAD);
         head.setRotX(extraData.headPitch() * Mth.DEG_TO_RAD);
-        CoreGeoBone upperBody = this.getAnimationProcessor().getBone("body_2");
+        GeoBone upperBody = this.getAnimationProcessor().getBone("body_2");
         upperBody.setRotY(extraData.netHeadYaw() * Mth.DEG_TO_RAD * 0.25F);
 //        float sinRotY = Mth.sin(upperBody.getRotationY());
 //        float cosRotY = Mth.cos(upperBody.getRotationY());

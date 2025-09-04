@@ -25,7 +25,7 @@ public class RandomButtonLayer extends GeoRenderLayer<ReplacedSnowGolem> {
     private static final ResourceLocation[] TEXTURES = Util.make(() -> {
         ResourceLocation[] textures = new ResourceLocation[SIZE];
         for (int i = 0; i < SIZE; i++) {
-            textures[i] = new ResourceLocation(WinterOverhaul.MODID, "textures/entity/buttons/snow_golem_buttons_"+(i+1)+".png");
+            textures[i] = WinterOverhaul.id("textures/entity/buttons/snow_golem_buttons_"+(i+1)+".png");
         }
         return textures;
     });
@@ -44,7 +44,7 @@ public class RandomButtonLayer extends GeoRenderLayer<ReplacedSnowGolem> {
         if (entity.isInvisible()) return;
         VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getRandomTexture(entity.getUUID())));
         this.renderer.reRender(bakedModel, poseStack, bufferSource, animatable, RenderType.entityTranslucent(getRandomTexture(entity.getUUID())), consumer, partialTick,
-            packedLight, packedOverlay, 1f, 1f, 1f, 1f
+            packedLight, packedOverlay, 0xFFFFFFFF
         );
     }
 

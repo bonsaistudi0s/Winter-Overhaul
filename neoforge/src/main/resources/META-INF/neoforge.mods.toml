@@ -1,0 +1,42 @@
+modLoader="javafml"
+loaderVersion="[1,)"
+license="All rights reserved"
+
+[[mods]]
+    modId="winteroverhaul"
+    version="${mod_version}"
+    displayName="Winter Overhaul"
+    logoFile="icon.png"
+    authors="Artist - Joosh, Dev - ThatGravyBoat"
+    description=""
+
+[[dependencies.winteroverhaul]]
+    modId="geckolib"
+    type="required"
+    versionRange="[${geckolib_version},)"
+    ordering="AFTER"
+    side="BOTH"
+
+[[dependencies.winteroverhaul]]
+    modId="neoforge"
+    type="required"
+    versionRange="[${neoforge_version},)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.winteroverhaul]]
+    modId="minecraft"
+    type="required"
+    versionRange="${minecraft_version_forge}"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.winteroverhaul]]
+    modId="architectury"
+    type="required"
+    versionRange="[${architectury_version},)"
+    ordering="NONE"
+    side="BOTH"
+
+[[mixins]]
+config = "winteroverhaul.mixins.json"

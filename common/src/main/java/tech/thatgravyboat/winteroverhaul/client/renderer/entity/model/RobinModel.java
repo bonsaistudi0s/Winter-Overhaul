@@ -2,8 +2,8 @@ package tech.thatgravyboat.winteroverhaul.client.renderer.entity.model;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.constant.DataTickets;
-import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 import tech.thatgravyboat.winteroverhaul.WinterOverhaul;
@@ -13,17 +13,17 @@ public class RobinModel extends GeoModel<Robin> {
 
     @Override
     public ResourceLocation getModelResource(Robin object) {
-        return new ResourceLocation(WinterOverhaul.MODID, "geo/robin.geo.json");
+        return WinterOverhaul.id("geo/robin.geo.json");
     }
 
     @Override
     public ResourceLocation getTextureResource(Robin object) {
-        return new ResourceLocation(WinterOverhaul.MODID, "textures/entity/robin.png");
+        return WinterOverhaul.id("textures/entity/robin.png");
     }
 
     @Override
     public ResourceLocation getAnimationResource(Robin animatable) {
-        return new ResourceLocation(WinterOverhaul.MODID, "animations/robin.animation.json");
+        return WinterOverhaul.id("animations/robin.animation.json");
     }
 
     @Override

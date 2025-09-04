@@ -6,10 +6,14 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
+import net.minecraft.world.item.component.DyedItemColor;
+import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.cache.object.GeoBone;
-import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoArmorRenderer;
 import tech.thatgravyboat.winteroverhaul.WinterOverhaul;
 import tech.thatgravyboat.winteroverhaul.common.items.SkateItem;
@@ -23,31 +27,31 @@ public class SkatesRenderer extends GeoArmorRenderer<SkateItem> {
     }
 
     @Override
-    public GeoBone getRightLegBone() {
-        return this.model.getBone("rightBoot").orElse(null);
+    public GeoBone getRightLegBone(GeoModel<SkateItem> model) {
+        return model.getBone("rightBoot").orElse(null);
     }
 
     @Override
-    public GeoBone getLeftLegBone() {
-        return this.model.getBone("leftBoot").orElse(null);
+    public GeoBone getLeftLegBone(GeoModel<SkateItem> model) {
+        return model.getBone("leftBoot").orElse(null);
     }
 
     @Override
-    public GeoBone getRightBootBone() {
-        return this.model.getBone("rightBoot").orElse(null);
+    public GeoBone getRightBootBone(GeoModel<SkateItem> model) {
+        return model.getBone("rightBoot").orElse(null);
     }
 
     @Override
-    public GeoBone getLeftBootBone() {
-        return this.model.getBone("leftBoot").orElse(null);
+    public GeoBone getLeftBootBone(GeoModel<SkateItem> model) {
+        return model.getBone("leftBoot").orElse(null);
     }
 
     @Override
-    public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-        renderWithColor(0,  matrixStackIn, bufferIn, packedLightIn, red, green, blue, alpha);
+    public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, int color) {
+        renderWithColor(0,  matrixStackIn, bufferIn, packedLightIn, color);
     }
 
-    public void renderWithColor(float partialTicks, PoseStack stack, VertexConsumer bufferIn, int packedLightIn, float red, float green, float blue, float alpha) {
+    public void renderWithColor(float partialTicks, PoseStack stack, VertexConsumer bufferIn, int packedLightIn, int color) {
         BakedGeoModel model = this.getGeoModel().getBakedModel(this.getGeoModel().getModelResource(this.animatable));
 
         AnimationState<SkateItem> itemState = new AnimationState<>(this.animatable, 0f, 0f, partialTicks, false);
@@ -56,22 +60,18 @@ public class SkatesRenderer extends GeoArmorRenderer<SkateItem> {
         stack.pushPose();
         var bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
         { // base
-            int color = this.getAnimatable().getColor(this.getCurrentStack());
-
-            red = (float) (color >> 16 & 255) / 255.0F;
-            green = (float) (color >> 8 & 255) / 255.0F;
-            blue = (float) (color & 255) / 255.0F;
+            color = DyedItemColor.getOrDefault(this.getCurrentStack(), DyedItemColor.LEATHER_COLOR);
 
             ResourceLocation texture = WinterOverhaul.id("textures/entity/skates/base.png");
             RenderSystem.setShaderTexture(0, texture);
             RenderType renderType = getRenderType(animatable, texture, bufferSource, partialTicks);
-            this.reRender(model, stack, bufferSource, this.animatable, renderType, bufferSource.getBuffer(renderType), partialTicks, packedLightIn, OverlayTexture.NO_OVERLAY, red, green, blue, alpha);
+            this.reRender(model, stack, bufferSource, this.animatable, renderType, bufferSource.getBuffer(renderType), partialTicks, packedLightIn, OverlayTexture.NO_OVERLAY, color);
         }
         { // overlay
             ResourceLocation texture = WinterOverhaul.id("textures/entity/skates/overlay.png");
             RenderSystem.setShaderTexture(0, texture);
             RenderType renderType = getRenderType(animatable, texture, bufferSource, partialTicks);
-            this.reRender(model, stack, bufferSource, this.animatable, renderType, bufferSource.getBuffer(renderType), partialTicks, packedLightIn, OverlayTexture.NO_OVERLAY, 1f, 1f, 1f, alpha);
+            this.reRender(model, stack, bufferSource, this.animatable, renderType, bufferSource.getBuffer(renderType), partialTicks, packedLightIn, OverlayTexture.NO_OVERLAY, FastColor.ARGB32.color(FastColor.ARGB32.alpha(color), 255, 255, 255));
         }
         //if (ModList.get().isLoaded("patchouli")) PatchouliCompat.patchouliLoaded(stack);
         stack.popPose();

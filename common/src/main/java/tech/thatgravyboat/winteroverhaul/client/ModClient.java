@@ -3,8 +3,8 @@ package tech.thatgravyboat.winteroverhaul.client;
 import dev.architectury.registry.client.level.entity.EntityRendererRegistry;
 import dev.architectury.registry.client.particle.ParticleProviderRegistry;
 import dev.architectury.registry.client.rendering.ColorHandlerRegistry;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.DyeableLeatherItem;
 import tech.thatgravyboat.winteroverhaul.client.particles.SnowflakeParticleProvider;
 import tech.thatgravyboat.winteroverhaul.client.renderer.entity.ReplacedSnowGolemRenderer;
 import tech.thatgravyboat.winteroverhaul.client.renderer.entity.RobinRenderer;
@@ -15,8 +15,8 @@ import tech.thatgravyboat.winteroverhaul.common.registry.ModParticles;
 public class ModClient {
     public static void onItemColors() {
         ColorHandlerRegistry.registerItemColors((stack, index) -> {
-            if (stack.getItem() instanceof DyeableLeatherItem dyeableArmorItem) {
-                return index == 0 ? dyeableArmorItem.getColor(stack) : -1;
+            if (stack.has(DataComponents.DYED_COLOR)) {
+                return index == 0 ? stack.get(DataComponents.DYED_COLOR).rgb() : -1;
             }
             return -1;
         }, ModItems.SKATES.get());

@@ -3,7 +3,7 @@ import net.fabricmc.loom.api.LoomGradleExtensionAPI
 plugins {
     `java`
     id("architectury-plugin") version "3.4-SNAPSHOT"
-    id("dev.architectury.loom") version "1.10-SNAPSHOT" apply false
+    id("dev.architectury.loom") version "1.11-SNAPSHOT" apply false
     id("com.gradleup.shadow") version "8.3.8" apply false
 }
 
@@ -16,6 +16,7 @@ allprojects {
 
     repositories {
         maven("https://maven.architectury.dev/")
+        maven("https://maven.neoforged.net/releases")
         maven("https://maven.parchmentmc.org")
         maven("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/") {
             content {
@@ -48,6 +49,6 @@ subprojects {
 
     tasks.withType(JavaCompile::class.java) {
         options.encoding = "UTF-8"
-        options.release.set(17)
+        options.release.set(21)
     }
 }

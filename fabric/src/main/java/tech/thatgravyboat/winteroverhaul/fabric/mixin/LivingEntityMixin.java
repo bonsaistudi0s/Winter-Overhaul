@@ -1,5 +1,6 @@
 package tech.thatgravyboat.winteroverhaul.fabric.mixin;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -23,7 +24,7 @@ public abstract class LivingEntityMixin extends Entity {
     }
 
     @Inject(method = "dropAllDeathLoot", at = @At("TAIL"))
-    private void handleMobDrops(DamageSource damageSource, CallbackInfo ci) {
+    private void handleMobDrops(ServerLevel level, DamageSource damageSource, CallbackInfo ci) {
         List<ItemEntity> drops = new ArrayList<>();
 
         WinterOverhaulFabric.MOD.onMobDrops((LivingEntity) (Object) this, drops);

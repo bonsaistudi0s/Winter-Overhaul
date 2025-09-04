@@ -43,7 +43,7 @@ public class UpgradeLayer extends GeoRenderLayer<ReplacedSnowGolem> {
                 getRenderer().reRender(bakedModel, poseStack, bufferSource,
                     animatable, translucentType, consumer, partialTick,
                     packedLight, OverlayTexture.NO_OVERLAY,
-                    1f, 1f, 1f, 1f);
+                    0xFFFFFFFF);
             });
 
             ItemStack face = upgradeAbleSnowGolem.getGolemUpgradeInSlot(GolemUpgradeSlot.FACE);
@@ -54,7 +54,7 @@ public class UpgradeLayer extends GeoRenderLayer<ReplacedSnowGolem> {
                 getRenderer().reRender(bakedModel, poseStack, bufferSource,
                     animatable, translucentType, consumer, partialTick,
                     packedLight, OverlayTexture.NO_OVERLAY,
-                    1f, 1f, 1f, 1f);
+                    0xFFFFFFFF);
             });
 
             ItemStack hat = upgradeAbleSnowGolem.getGolemUpgradeInSlot(GolemUpgradeSlot.HAT);
@@ -65,7 +65,7 @@ public class UpgradeLayer extends GeoRenderLayer<ReplacedSnowGolem> {
                 getRenderer().reRender(bakedModel, poseStack, bufferSource,
                     animatable, translucentType, consumer, partialTick,
                     packedLight, OverlayTexture.NO_OVERLAY,
-                    1f, 1f, 1f, 1f);
+                    0xFFFFFFFF);
             });
         }
     }
@@ -74,6 +74,6 @@ public class UpgradeLayer extends GeoRenderLayer<ReplacedSnowGolem> {
         if (item.isEmpty()) return Optional.empty();
         ResourceLocation itemPath = BuiltInRegistries.ITEM.getKey(item.getItem());
         if (itemPath == null) return Optional.empty();
-        return Optional.of(new ResourceLocation(WinterOverhaul.MODID, "textures/entity/upgrades/"+itemPath.getPath()+".png"));
+        return Optional.of(WinterOverhaul.id("textures/entity/upgrades/"+itemPath.getPath()+".png"));
     }
 }

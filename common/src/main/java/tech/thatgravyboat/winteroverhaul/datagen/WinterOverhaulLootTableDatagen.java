@@ -2,6 +2,7 @@ package tech.thatgravyboat.winteroverhaul.datagen;
 
 import dev.architectury.injectables.annotations.PlatformOnly;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.EntityLootSubProvider;
 import net.minecraft.data.loot.LootTableProvider;
@@ -11,31 +12,28 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
-import net.minecraft.world.level.storage.loot.functions.LootingEnchantFunction;
+import net.minecraft.world.level.storage.loot.functions.EnchantedCountIncreaseFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.minecraft.world.level.storage.loot.predicates.LootItemConditions;
-import net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import tech.thatgravyboat.winteroverhaul.common.registry.ModEntities;
 
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
 
 public class WinterOverhaulLootTableDatagen extends LootTableProvider {
-    public WinterOverhaulLootTableDatagen(PackOutput output) {
+    public WinterOverhaulLootTableDatagen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, Set.of(), List.of(
             new SubProviderEntry(WinterOverhaulEntityLootDatagen::new, LootContextParamSets.ALL_PARAMS)
-        ));
+        ), registries);
     }
 
     public static class WinterOverhaulEntityLootDatagen extends EntityLootSubProvider implements KnownEntityTypeProvider {
-        public WinterOverhaulEntityLootDatagen() {
-            super(FeatureFlags.DEFAULT_FLAGS);
+        public WinterOverhaulEntityLootDatagen(HolderLookup.Provider registries) {
+            super(FeatureFlags.DEFAULT_FLAGS, registries);
         }
 
         @Override
@@ -51,7 +49,7 @@ public class WinterOverhaulLootTableDatagen extends LootTableProvider {
                                     SetItemCountFunction.setCount(UniformGenerator.between(0f, 2f))
                                 )
                                 .apply(
-                                    LootingEnchantFunction.lootingMultiplier(UniformGenerator.between(0f, 1f))
+                                    EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0f, 1f))
                                 )
                         )
                 )
@@ -63,7 +61,7 @@ public class WinterOverhaulLootTableDatagen extends LootTableProvider {
             return Stream.of(ModEntities.ROBIN.get().builtInRegistryHolder());
         }
 
-        @PlatformOnly("forge")
+        @PlatformOnly("neoforge")
         public Stream<EntityType<?>> getKnownEntityTypes() {
             return Stream.of(ModEntities.ROBIN.get());
         }

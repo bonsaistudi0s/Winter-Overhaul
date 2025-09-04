@@ -10,16 +10,16 @@ public class SkatesModel extends GeoModel<SkateItem> {
 
     @Override
     public ResourceLocation getModelResource(SkateItem object) {
-        return new ResourceLocation(WinterOverhaul.MODID, "geo/skates.geo.json");
+        return WinterOverhaul.id("geo/skates.geo.json");
     }
 
     @Override
     public ResourceLocation getTextureResource(SkateItem object) {
-        return new ResourceLocation(WinterOverhaul.MODID, "textures/entity/skates/base.png");
+        return WinterOverhaul.id("textures/entity/skates/base.png");
     }
 
     @Override
     public ResourceLocation getAnimationResource(SkateItem animatable) {
-        return new ResourceLocation(WinterOverhaul.MODID, "animations/empty.animation.json");
+        return WinterOverhaul.id("animations/empty.animation.json");
     }
 }

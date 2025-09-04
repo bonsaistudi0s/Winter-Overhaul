@@ -1,5 +1,6 @@
 package tech.thatgravyboat.winteroverhaul;
 
+import dev.architectury.registry.level.entity.SpawnPlacementsRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.cauldron.CauldronInteraction;
@@ -30,10 +31,7 @@ import org.apache.logging.log4j.Logger;
 import tech.thatgravyboat.winteroverhaul.common.entity.IUpgradeAbleSnowGolem;
 import tech.thatgravyboat.winteroverhaul.common.entity.Robin;
 import tech.thatgravyboat.winteroverhaul.common.items.GolemUpgradeSlot;
-import tech.thatgravyboat.winteroverhaul.common.registry.ModEntities;
-import tech.thatgravyboat.winteroverhaul.common.registry.ModItems;
-import tech.thatgravyboat.winteroverhaul.common.registry.ModParticles;
-import tech.thatgravyboat.winteroverhaul.common.registry.ModSounds;
+import tech.thatgravyboat.winteroverhaul.common.registry.*;
 import tech.thatgravyboat.winteroverhaul.common.util.BiomeSpawns;
 import tech.thatgravyboat.winteroverhaul.common.util.EntityAttributesBuilder;
 
@@ -50,6 +48,8 @@ public class WinterOverhaul {
         ModParticles.PARTICLES.register();
         ModEntities.ENTITIES.register();
         ModSounds.SOUNDS.register();
+        ModArmorMaterials.ARMOR_MATERIALS.register();
+        ModItems.TAB_REGISTER.register();
     }
 
     public InteractionResult onEntityRightClick(Entity target, ItemStack stack, Player player) {
@@ -127,7 +127,7 @@ public class WinterOverhaul {
     }
 
     public void onComplete() {
-        SpawnPlacements.register(ModEntities.ROBIN.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING,
+        SpawnPlacementsRegistry.register(ModEntities.ROBIN, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING,
                 (entity, level, spawn, pos, random) -> {
                     BlockState state = level.getBlockState(pos.below());
                     boolean isLeaves = state.is(BlockTags.LEAVES);
@@ -137,7 +137,7 @@ public class WinterOverhaul {
                     return (isLeaves || isSnow || isGrass || state.isAir()) && level.getRawBrightness(pos, 0) > 8;
 
                 });
-        CauldronInteraction.WATER.put(ModItems.SKATES.get(), CauldronInteraction.DYED_ITEM);
+        CauldronInteraction.WATER.map().put(ModItems.SKATES.get(), CauldronInteraction.DYED_ITEM);
     }
 
     private static Item getRandomHatAndScarf(int randomInt) {
@@ -154,7 +154,7 @@ public class WinterOverhaul {
     }
 
     public static ResourceLocation id(String path) {
-        return new ResourceLocation(MODID, path);
+        return ResourceLocation.fromNamespaceAndPath(MODID, path);
     }
 }
 
