@@ -84,7 +84,7 @@ public class WinterOverhaul {
         boolean isSkeleton = type.equals(EntityType.SKELETON) || type.equals(EntityType.STRAY);
         boolean isZombie = type.equals(EntityType.ZOMBIE);
 
-        if (isSkeleton || isZombie) {
+        if ((isSkeleton || isZombie) && !mob.isBaby()) {
             Holder<Biome> biome = level.getBiomeManager().getBiome(entity.blockPosition());
 
             if (biome.isBound() && biome.value().hasPrecipitation() && biome.value().getPrecipitationAt(entity.blockPosition()).equals(Biome.Precipitation.SNOW)) {
