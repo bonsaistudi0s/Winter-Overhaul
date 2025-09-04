@@ -11,7 +11,7 @@ allprojects {
     apply(plugin = "java")
     apply(plugin = "architectury-plugin")
 
-    version = rootProject.property("mod_version") as String
+    version = "${rootProject.property("mod_version")}+${rootProject.property("minecraft_version")}"
     group = rootProject.property("maven_group") as String
 
     repositories {
