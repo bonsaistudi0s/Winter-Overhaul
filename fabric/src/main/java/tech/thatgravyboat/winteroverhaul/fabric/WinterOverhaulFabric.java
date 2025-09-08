@@ -39,7 +39,7 @@ public class WinterOverhaulFabric implements ModInitializer {
         for (BiomeSpawns.SpawnData spawn : spawns.getSpawns()) {
             BiomeModifications.create(WinterOverhaul.id("mob_drops_" + i++))
                 .add(ModificationPhase.ADDITIONS, selection -> spawn.selector().test(selection.getBiomeRegistryEntry()), (selection, modification) -> {
-                    modification.getSpawnSettings().addSpawn(spawn.category(), spawn.spawnerData());
+                    modification.getSpawnSettings().addSpawn(spawn.category(), spawn.spawnerData().value(), spawn.spawnerData().weight());
                 });
         }
 

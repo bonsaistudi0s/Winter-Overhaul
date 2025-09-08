@@ -30,7 +30,7 @@ public abstract class MixinLivingEntity extends Entity {
     }
 
     @ModifyVariable(
-        method = "travel",
+        method = "travelInAir",
         at = @At(value = "STORE"),
         slice = @Slice(
             from = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;getBlockPosBelowThatAffectsMyMovement()Lnet/minecraft/core/BlockPos;"),

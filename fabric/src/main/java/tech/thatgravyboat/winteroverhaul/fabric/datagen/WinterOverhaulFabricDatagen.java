@@ -15,7 +15,7 @@ public class WinterOverhaulFabricDatagen implements DataGeneratorEntrypoint {
     public void onInitializeDataGenerator(FabricDataGenerator generator) {
         var pack = generator.createPack();
 
-        pack.addProvider(WinterOverhaulRecipeDatagen::new);
+        pack.addProvider(WinterOverhaulRecipeDatagen.Runner::new);
         pack.addProvider(WinterOverhaulLootTableDatagen::new);
         pack.addProvider(WinterOverhaulItemTagDatagen::new);
     }

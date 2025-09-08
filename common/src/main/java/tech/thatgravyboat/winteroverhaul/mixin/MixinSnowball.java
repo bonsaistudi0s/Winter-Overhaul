@@ -10,7 +10,6 @@ import net.minecraft.world.entity.projectile.Snowball;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import tech.thatgravyboat.winteroverhaul.common.entity.ISnowGolemSnowball;
 
 import java.util.ArrayList;
@@ -28,14 +27,14 @@ public class MixinSnowball implements ISnowGolemSnowball {
     @Unique
     private final List<MobEffectInstance> hitEffects = new ArrayList<>();
 
-    @WrapOperation(method = "onHitEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
-    private boolean onHurt(Entity entity, DamageSource source, float amount, Operation<Boolean> original) {
+    @WrapOperation(method = "onHitEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)V"))
+    private void onHurt(Entity entity, DamageSource source, float amount, Operation<Boolean> original) {
         if (winteroverhaul_isGolemSnowball()) {
             amount = amount == 0 ? 1 : amount;
             amount *= winteroverhaul_getGolemMultiplier();
         }
         if (entity instanceof LivingEntity livingEntity) hitEffects.forEach(livingEntity::addEffect);
-        return original.call(entity, source, amount);
+        original.call(entity, source, amount);
     }
 
     @Override

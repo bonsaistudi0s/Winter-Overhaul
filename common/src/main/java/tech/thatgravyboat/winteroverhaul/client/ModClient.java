@@ -14,12 +14,12 @@ import tech.thatgravyboat.winteroverhaul.common.registry.ModParticles;
 
 public class ModClient {
     public static void onItemColors() {
-        ColorHandlerRegistry.registerItemColors((stack, index) -> {
-            if (stack.has(DataComponents.DYED_COLOR)) {
-                return index == 0 ? stack.get(DataComponents.DYED_COLOR).rgb() : -1;
-            }
-            return -1;
-        }, ModItems.SKATES.get());
+//        ColorHandlerRegistry.registerItemColors((stack, index) -> {
+//            if (stack.has(DataComponents.DYED_COLOR)) {
+//                return index == 0 ? stack.get(DataComponents.DYED_COLOR).rgb() : -1;
+//            }
+//            return -1;
+//        }, ModItems.SKATES.get());
     }
 
     public static void setupEntityRenderers() {

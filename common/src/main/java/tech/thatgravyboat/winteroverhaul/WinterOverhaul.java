@@ -34,6 +34,7 @@ import tech.thatgravyboat.winteroverhaul.common.items.GolemUpgradeSlot;
 import tech.thatgravyboat.winteroverhaul.common.registry.*;
 import tech.thatgravyboat.winteroverhaul.common.util.BiomeSpawns;
 import tech.thatgravyboat.winteroverhaul.common.util.EntityAttributesBuilder;
+import tech.thatgravyboat.winteroverhaul.mixin.AccessorCauldronInteraction;
 
 import java.util.Collection;
 import java.util.List;
@@ -48,7 +49,7 @@ public class WinterOverhaul {
         ModParticles.PARTICLES.register();
         ModEntities.ENTITIES.register();
         ModSounds.SOUNDS.register();
-        ModArmorMaterials.ARMOR_MATERIALS.register();
+//        ModArmorMaterials.ARMOR_MATERIALS.register();
         ModItems.TAB_REGISTER.register();
     }
 
@@ -62,7 +63,7 @@ public class WinterOverhaul {
             newStack.setCount(1);
             upgradeAbleSnowGolem.setGolemUpgradeInSlot(GolemUpgradeSlot.FACE, newStack);
             stack.shrink(1);
-            return InteractionResult.sidedSuccess(player.level().isClientSide);
+            return InteractionResult.SUCCESS;
         }
         if (stack.isEmpty() && player.isShiftKeyDown()) {
             for (GolemUpgradeSlot value : GolemUpgradeSlot.values()) {
@@ -70,7 +71,7 @@ public class WinterOverhaul {
                 if (oldStack.isEmpty()) continue;
                 player.drop(oldStack, true);
             }
-            return InteractionResult.sidedSuccess(player.level().isClientSide);
+            return InteractionResult.SUCCESS;
         }
 
         return InteractionResult.PASS;
@@ -87,7 +88,7 @@ public class WinterOverhaul {
         if ((isSkeleton || isZombie) && !mob.isBaby()) {
             Holder<Biome> biome = level.getBiomeManager().getBiome(entity.blockPosition());
 
-            if (biome.isBound() && biome.value().hasPrecipitation() && biome.value().getPrecipitationAt(entity.blockPosition()).equals(Biome.Precipitation.SNOW)) {
+            if (biome.isBound() && biome.value().hasPrecipitation() && biome.value().getPrecipitationAt(entity.blockPosition(), level.getSeaLevel()).equals(Biome.Precipitation.SNOW)) {
                 if (mob.getRandom().nextFloat() > 0.90f && mob.getRandom().nextFloat() > 0.5f){
                     Item item = getRandomHatAndScarf(mob.getRandom().nextInt(8));
                     mob.setItemSlot(EquipmentSlot.HEAD, new ItemStack(item));
@@ -100,7 +101,7 @@ public class WinterOverhaul {
         spawns.addSpawn(
             biome -> biome.is(BiomeTags.IS_TAIGA) && biome.value().getBaseTemperature() < 0.15f,
             MobCategory.CREATURE,
-            new MobSpawnSettings.SpawnerData(ModEntities.ROBIN.get(), 25, 1, 2)
+            new MobSpawnSettings.SpawnerData(ModEntities.ROBIN.get(), 1, 2), 25
         );
     }
 
@@ -137,7 +138,7 @@ public class WinterOverhaul {
                     return (isLeaves || isSnow || isGrass || state.isAir()) && level.getRawBrightness(pos, 0) > 8;
 
                 });
-        CauldronInteraction.WATER.map().put(ModItems.SKATES.get(), CauldronInteraction.DYED_ITEM);
+        CauldronInteraction.WATER.map().put(ModItems.SKATES.get(), AccessorCauldronInteraction::callDyedItemIteration);
     }
 
     private static Item getRandomHatAndScarf(int randomInt) {

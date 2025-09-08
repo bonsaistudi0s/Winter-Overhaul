@@ -7,10 +7,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.AgeableMob;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.FlyingMoveControl;
@@ -31,6 +28,10 @@ import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoAnimatable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animatable.manager.AnimatableManager;
+import software.bernie.geckolib.animatable.processing.AnimationController;
+import software.bernie.geckolib.animatable.processing.AnimationState;
+import software.bernie.geckolib.animatable.processing.AnimationTest;
 import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.util.GeckoLibUtil;
 import tech.thatgravyboat.winteroverhaul.common.registry.ModEntities;
@@ -72,7 +73,7 @@ public class Robin extends Animal implements FlyingAnimal, GeoEntity {
     protected @NotNull PathNavigation createNavigation(@NotNull Level level) {
         FlyingPathNavigation flyingpathnavigation = new FlyingPathNavigation(this, level);
         flyingpathnavigation.setCanFloat(true);
-        flyingpathnavigation.setCanPassDoors(true);
+//        flyingpathnavigation.setCanPassDoors(true);
         return flyingpathnavigation;
     }
 
@@ -113,8 +114,9 @@ public class Robin extends Animal implements FlyingAnimal, GeoEntity {
     }
     //endregion
 
+
     @Override
-    public boolean causeFallDamage(float pFallDistance, float pMultiplier, @NotNull DamageSource source) {
+    public boolean causeFallDamage(double fallDistance, float damageMultiplier, DamageSource damageSource) {
         return false;
     }
 
@@ -122,8 +124,8 @@ public class Robin extends Animal implements FlyingAnimal, GeoEntity {
     protected void checkFallDamage(double pY, boolean pOnGround, @NotNull BlockState state, @NotNull BlockPos pos) {}
 
     @Override
-    public boolean doHurtTarget(Entity pEntity) {
-        return pEntity.hurt(this.damageSources().mobAttack(this), 3.0F);
+    public boolean doHurtTarget(ServerLevel level, Entity source) {
+        return source.hurtServer(level, this.damageSources().mobAttack(this), 3.0F);
     }
 
     //region Sounds
@@ -155,7 +157,7 @@ public class Robin extends Animal implements FlyingAnimal, GeoEntity {
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(@NotNull ServerLevel level, @NotNull AgeableMob mob) {
-        return ModEntities.ROBIN.get().create(level);
+        return ModEntities.ROBIN.get().create(level, EntitySpawnReason.BREEDING);
     }
 
     //endregion
@@ -172,10 +174,10 @@ public class Robin extends Animal implements FlyingAnimal, GeoEntity {
     public static final RawAnimation IDLE_3 = RawAnimation.begin().thenPlay("animation.robin.idle3");
     public static final RawAnimation FLY = RawAnimation.begin().thenLoop("animation.robin.fly");
 
-    private <E extends GeoAnimatable> PlayState idle(AnimationState<E> event) {
-        boolean isRunning = !event.getController().getAnimationState().equals(AnimationController.State.STOPPED);
+    private <E extends GeoAnimatable> PlayState idle(AnimationTest<E> event) {
+        boolean isRunning = !event.controller().getAnimationState().equals(AnimationController.State.STOPPED);
         if (isFlying()) {
-            event.getController().forceAnimationReset();
+            event.controller().forceAnimationReset();
             return PlayState.STOP;
         }
         if (isRunning) return PlayState.CONTINUE;
@@ -185,36 +187,36 @@ public class Robin extends Animal implements FlyingAnimal, GeoEntity {
         if (threeCheck || fourCheck || fiveCheck) {
             switch (random.nextInt(3)) {
                 case 0 -> {
-                    event.getController().setAnimation(IDLE_1);
+                    event.controller().setAnimation(IDLE_1);
                     return PlayState.CONTINUE;
                 }
                 case 1 -> {
-                    event.getController().setAnimation(IDLE_2);
+                    event.controller().setAnimation(IDLE_2);
                     return PlayState.CONTINUE;
                 }
                 default -> {
-                    event.getController().setAnimation(IDLE_3);
+                    event.controller().setAnimation(IDLE_3);
                     return PlayState.CONTINUE;
                 }
             }
         }
-        event.getController().forceAnimationReset();
+        event.controller().forceAnimationReset();
         return PlayState.STOP;
     }
 
-    private <E extends GeoAnimatable> PlayState flying(AnimationState<E> event) {
+    private <E extends GeoAnimatable> PlayState flying(AnimationTest<E> event) {
         if (isFlying()) {
-            event.getController().setAnimation(FLY);
+            event.controller().setAnimation(FLY);
             return PlayState.CONTINUE;
         }
-        event.getController().forceAnimationReset();
+        event.controller().forceAnimationReset();
         return PlayState.STOP;
     }
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "flight_controller", 0, this::flying));
-        controllers.add(new AnimationController<>(this, "idle_controller", 5, this::idle));
+        controllers.add(new AnimationController<>("flight_controller", 0, this::flying));
+        controllers.add(new AnimationController<>("idle_controller", 5, this::idle));
     }
 
     @Override

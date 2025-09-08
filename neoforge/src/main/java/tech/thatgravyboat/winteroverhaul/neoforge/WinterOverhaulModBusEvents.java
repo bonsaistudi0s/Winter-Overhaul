@@ -39,15 +39,15 @@ public class WinterOverhaulModBusEvents {
         ModClient.setupParticles();
     }
 
-    @SubscribeEvent
-    public static void onItemColors(RegisterColorHandlersEvent.Item event) {
-        ModClient.onItemColors();
-    }
+//    @SubscribeEvent
+//    public static void onItemColors(RegisterColorHandlersEvent.Item event) {
+//        ModClient.onItemColors();
+//    }
 
     @SubscribeEvent
-    public static void onDataGeneration(GatherDataEvent event) {
-        event.getGenerator().addProvider(event.includeServer(), (DataProvider.Factory<WinterOverhaulRecipeDatagen>) output -> new WinterOverhaulRecipeDatagen(output, event.getLookupProvider()));
-        event.getGenerator().addProvider(event.includeServer(), (DataProvider.Factory<WinterOverhaulLootTableDatagen>) output -> new WinterOverhaulLootTableDatagen(output, event.getLookupProvider()));
-        event.getGenerator().addProvider(event.includeServer(), (DataProvider.Factory<WinterOverhaulItemTagDatagen>) output -> new WinterOverhaulItemTagDatagen(output, event.getLookupProvider()));
+    public static void onDataGeneration(GatherDataEvent.Server event) {
+        event.getGenerator().addProvider(true, (DataProvider.Factory<WinterOverhaulRecipeDatagen.Runner>) output -> new WinterOverhaulRecipeDatagen.Runner(output, event.getLookupProvider()));
+        event.getGenerator().addProvider(true, (DataProvider.Factory<WinterOverhaulLootTableDatagen>) output -> new WinterOverhaulLootTableDatagen(output, event.getLookupProvider()));
+        event.getGenerator().addProvider(true, (DataProvider.Factory<WinterOverhaulItemTagDatagen>) output -> new WinterOverhaulItemTagDatagen(output, event.getLookupProvider()));
     }
 }

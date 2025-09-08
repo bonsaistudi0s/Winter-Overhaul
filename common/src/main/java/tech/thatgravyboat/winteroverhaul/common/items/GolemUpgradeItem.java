@@ -2,23 +2,24 @@ package tech.thatgravyboat.winteroverhaul.common.items;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
+import net.minecraft.client.resources.model.EquipmentClientInfo;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.SnowGolem;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,7 +27,7 @@ import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
 import software.bernie.geckolib.animatable.client.GeoRenderProvider;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animatable.manager.AnimatableManager;
 import software.bernie.geckolib.renderer.GeoArmorRenderer;
 import software.bernie.geckolib.util.GeckoLibUtil;
 import tech.thatgravyboat.winteroverhaul.WinterOverhaul;
@@ -35,23 +36,22 @@ import tech.thatgravyboat.winteroverhaul.common.entity.IUpgradeAbleSnowGolem;
 import tech.thatgravyboat.winteroverhaul.common.registry.ModArmorMaterials;
 import tech.thatgravyboat.winteroverhaul.common.registry.ModItems;
 
-import java.util.List;
 import java.util.function.Consumer;
 
-public class GolemUpgradeItem extends ArmorItem implements GeoItem {
+public class GolemUpgradeItem extends Item implements GeoItem {
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private final GolemUpgradeSlot slot;
 
     public GolemUpgradeItem(GolemUpgradeSlot slot, Item.Properties pProperties) {
-        super(ModArmorMaterials.GOLEM_UPGRADE, Type.HELMET, pProperties.stacksTo(1));
+        super(pProperties.stacksTo(1).humanoidArmor(ModArmorMaterials.GOLEM_UPGRADE, ArmorType.HELMET));
         this.slot = slot;
 
         SingletonGeoAnimatable.registerSyncedAnimatable(this);
     }
 
     @Override
-    public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level pLevel, Player pPlayer, @NotNull InteractionHand pHand) {
+    public @NotNull InteractionResult use(@NotNull Level pLevel, Player pPlayer, @NotNull InteractionHand pHand) {
         ItemStack itemstack = pPlayer.getItemInHand(pHand);
         EquipmentSlot equipmentslot = pPlayer.getEquipmentSlotForItem(itemstack);
         ItemStack itemstack1 = pPlayer.getItemBySlot(equipmentslot);
@@ -62,9 +62,9 @@ public class GolemUpgradeItem extends ArmorItem implements GeoItem {
             }
 
             itemstack.setCount(0);
-            return InteractionResultHolder.sidedSuccess(itemstack, pLevel.isClientSide());
+            return InteractionResult.SUCCESS;
         } else {
-            return InteractionResultHolder.pass(itemstack);
+            return InteractionResult.PASS;
         }
     }
 
@@ -79,12 +79,7 @@ public class GolemUpgradeItem extends ArmorItem implements GeoItem {
         if (!oldHat.isEmpty()) player.drop(oldHat, true);
         upgradeAbleSnowGolem.setGolemUpgradeInSlot(slot, stack.copy());
         stack.shrink(1);
-        return InteractionResult.sidedSuccess(player.level().isClientSide);
-    }
-
-    @Override
-    public EquipmentSlot getEquipmentSlot() {
-        return EquipmentSlot.HEAD;
+        return InteractionResult.SUCCESS;
     }
 
     public void tick(ItemStack stack, SnowGolem golem) {
@@ -118,10 +113,10 @@ public class GolemUpgradeItem extends ArmorItem implements GeoItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag tooltipFlag) {
-        tooltip.add(Component.empty());
-        tooltip.add(Component.translatable("item.winteroverhaul.upgrade.header").withStyle(ChatFormatting.GRAY));
-        tooltip.add(getDesc().withStyle(ChatFormatting.BLUE));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay tooltipDisplay, Consumer<Component> tooltip, TooltipFlag flag) {
+        tooltip.accept(Component.empty());
+        tooltip.accept(Component.translatable("item.winteroverhaul.upgrade.header").withStyle(ChatFormatting.GRAY));
+        tooltip.accept(getDesc().withStyle(ChatFormatting.BLUE));
     }
 
     public MutableComponent getDesc() {
@@ -129,17 +124,12 @@ public class GolemUpgradeItem extends ArmorItem implements GeoItem {
     }
 
     @Override
-    public ItemAttributeModifiers getDefaultAttributeModifiers() {
-        return ItemAttributeModifiers.EMPTY;
-    }
-
-    @Override
     public void createGeoRenderer(Consumer<GeoRenderProvider> consumer) {
         consumer.accept(new GeoRenderProvider() {
-            private GeoArmorRenderer<?> renderer;
+            private GeoArmorRenderer<?, ?> renderer;
 
             @Override
-            public @Nullable <T extends LivingEntity> HumanoidModel<?> getGeoArmorRenderer(@Nullable T livingEntity, ItemStack itemStack, @Nullable EquipmentSlot equipmentSlot, @Nullable HumanoidModel<T> original) {
+            public @Nullable <S extends HumanoidRenderState> GeoArmorRenderer<?, ?> getGeoArmorRenderer(@Nullable S renderState, ItemStack itemStack, EquipmentSlot equipmentSlot, EquipmentClientInfo.LayerType type, @Nullable HumanoidModel<S> original) {
                 if (this.renderer == null)
                     this.renderer = new CosmeticsRenderer();
 

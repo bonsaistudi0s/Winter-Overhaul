@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 
 @Mixin(EntityLootSubProvider.class)
 public abstract class EntityLootSubProviderMixin {
-    @ModifyExpressionValue(method = "generate(Ljava/util/function/BiConsumer;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/DefaultedRegistry;holders()Ljava/util/stream/Stream;"))
+    @ModifyExpressionValue(method = "generate(Ljava/util/function/BiConsumer;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/DefaultedRegistry;listElements()Ljava/util/stream/Stream;"))
     private Stream<Holder.Reference<EntityType<?>>> useKnownEntityTypes(Stream<Holder.Reference<EntityType<?>>> original) {
         if (this instanceof KnownEntityTypeProvider provider) {
             return provider.winteroverhaul$getKnownEntityTypes();

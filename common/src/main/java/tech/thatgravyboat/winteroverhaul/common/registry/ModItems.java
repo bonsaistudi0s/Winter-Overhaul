@@ -1,12 +1,12 @@
 package tech.thatgravyboat.winteroverhaul.common.registry;
 
 import dev.architectury.core.item.ArchitecturySpawnEggItem;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.architectury.registry.CreativeTabRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -15,25 +15,27 @@ import tech.thatgravyboat.winteroverhaul.common.items.GolemUpgradeItem;
 import tech.thatgravyboat.winteroverhaul.common.items.GolemUpgradeSlot;
 import tech.thatgravyboat.winteroverhaul.common.items.SkateItem;
 
+import java.util.function.Function;
+
 public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(WinterOverhaul.MODID, Registries.ITEM);
 
-    public static final RegistrySupplier<Item> YELLOW_SCARF = ITEMS.register("yellow_scarf", () -> new GolemUpgradeItem(GolemUpgradeSlot.SCARF, createProps()));
-    public static final RegistrySupplier<Item> RED_SCARF = ITEMS.register("red_scarf", () -> new GolemUpgradeItem(GolemUpgradeSlot.SCARF, createProps()));
-    public static final RegistrySupplier<Item> CYAN_SCARF = ITEMS.register("cyan_scarf", () -> new GolemUpgradeItem(GolemUpgradeSlot.SCARF, createProps()));
-    public static final RegistrySupplier<Item> GREEN_SCARF = ITEMS.register("green_scarf", () -> new GolemUpgradeItem(GolemUpgradeSlot.SCARF, createProps()));
+    public static final RegistrySupplier<Item> YELLOW_SCARF = register("yellow_scarf", key -> new GolemUpgradeItem(GolemUpgradeSlot.SCARF, createProps(key)));
+    public static final RegistrySupplier<Item> RED_SCARF = register("red_scarf", key -> new GolemUpgradeItem(GolemUpgradeSlot.SCARF, createProps(key)));
+    public static final RegistrySupplier<Item> CYAN_SCARF = register("cyan_scarf", key -> new GolemUpgradeItem(GolemUpgradeSlot.SCARF, createProps(key)));
+    public static final RegistrySupplier<Item> GREEN_SCARF = register("green_scarf", key -> new GolemUpgradeItem(GolemUpgradeSlot.SCARF, createProps(key)));
 
-    public static final RegistrySupplier<Item> YELLOW_HAT = ITEMS.register("yellow_winter_hat", () -> new GolemUpgradeItem(GolemUpgradeSlot.HAT, createProps()));
-    public static final RegistrySupplier<Item> RED_HAT = ITEMS.register("red_winter_hat", () -> new GolemUpgradeItem(GolemUpgradeSlot.HAT, createProps()));
-    public static final RegistrySupplier<Item> CYAN_HAT = ITEMS.register("cyan_winter_hat", () -> new GolemUpgradeItem(GolemUpgradeSlot.HAT, createProps()));
-    public static final RegistrySupplier<Item> GREEN_HAT = ITEMS.register("green_winter_hat", () -> new GolemUpgradeItem(GolemUpgradeSlot.HAT, createProps()));
+    public static final RegistrySupplier<Item> YELLOW_HAT = register("yellow_winter_hat", key -> new GolemUpgradeItem(GolemUpgradeSlot.HAT, createProps(key)));
+    public static final RegistrySupplier<Item> RED_HAT = register("red_winter_hat", key -> new GolemUpgradeItem(GolemUpgradeSlot.HAT, createProps(key)));
+    public static final RegistrySupplier<Item> CYAN_HAT = register("cyan_winter_hat", key -> new GolemUpgradeItem(GolemUpgradeSlot.HAT, createProps(key)));
+    public static final RegistrySupplier<Item> GREEN_HAT = register("green_winter_hat", key -> new GolemUpgradeItem(GolemUpgradeSlot.HAT, createProps(key)));
 
-    public static final RegistrySupplier<Item> TOP_HAT = ITEMS.register("top_hat", () -> new GolemUpgradeItem(GolemUpgradeSlot.HAT, createProps()));
+    public static final RegistrySupplier<Item> TOP_HAT = register("top_hat", key -> new GolemUpgradeItem(GolemUpgradeSlot.HAT, createProps(key)));
 
-    public static final RegistrySupplier<Item> ROBIN_SPAWN_EGG = ITEMS.register("robin_spawn_egg", () ->
-            new ArchitecturySpawnEggItem(ModEntities.ROBIN, 0x57372F, 0xC96125, createProps()));
+    public static final RegistrySupplier<Item> ROBIN_SPAWN_EGG = register("robin_spawn_egg", key ->
+            new ArchitecturySpawnEggItem(ModEntities.ROBIN, createProps(key)));
 
-    public static final RegistrySupplier<Item> SKATES = ITEMS.register("skates", () -> new SkateItem(createProps()));
+    public static final RegistrySupplier<Item> SKATES = register("skates", key -> new SkateItem(createProps(key)));
 
     public static final DeferredRegister<CreativeModeTab> TAB_REGISTER = DeferredRegister.create(WinterOverhaul.MODID, Registries.CREATIVE_MODE_TAB);
     public static final RegistrySupplier<CreativeModeTab> TAB = TAB_REGISTER.register("tab", () -> CreativeTabRegistry.create(builder -> builder
@@ -58,8 +60,11 @@ public class ModItems {
         output.accept(SKATES.get());
     }
 
-    private static Item.Properties createProps() {
-        return new Item.Properties();
+    private static Item.Properties createProps(ResourceKey<Item> key) {
+        return new Item.Properties().setId(key);
     }
 
+    private static <T extends Item> RegistrySupplier<T> register(String id, Function<ResourceKey<Item>, T> builderConsumer) {
+        return ITEMS.register(id, () -> builderConsumer.apply(ResourceKey.create(Registries.ITEM, WinterOverhaul.id(id))));
+    }
 }

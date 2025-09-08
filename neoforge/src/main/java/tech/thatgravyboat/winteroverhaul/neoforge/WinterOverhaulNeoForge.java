@@ -1,5 +1,6 @@
 package tech.thatgravyboat.winteroverhaul.neoforge;
 
+import net.minecraft.util.random.Weighted;
 import net.minecraft.world.InteractionResult;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
