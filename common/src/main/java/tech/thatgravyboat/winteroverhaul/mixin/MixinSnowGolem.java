@@ -138,8 +138,9 @@ public abstract class MixinSnowGolem extends Mob implements IUpgradeAbleSnowGole
     @Override
     public ItemStack setGolemUpgradeInSlot(GolemUpgradeSlot slot, ItemStack stack) {
         if (winteroverhaul_upgrades == null) return ItemStack.EMPTY;
+        ItemStack oldStack = winteroverhaul_upgrades.set(slot.index, stack);
         winteroverhaul_updateUpgrades();
-        return winteroverhaul_upgrades.set(slot.index, stack);
+        return oldStack;
     }
 
     @Override
