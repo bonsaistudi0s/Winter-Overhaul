@@ -8,7 +8,9 @@ architectury {
 }
 
 fabricApi {
-    configureDataGeneration()
+    configureDataGeneration {
+        client = true
+    }
 }
 
 base {
