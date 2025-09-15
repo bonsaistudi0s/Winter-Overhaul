@@ -8,10 +8,13 @@ architectury {
 }
 
 val generatedResources = file("src/generated")
+// why
+val generatedClientResources = file("src/generated_client")
 
 sourceSets {
     main {
         resources.srcDir(generatedResources)
+        resources.srcDir(generatedClientResources)
     }
 }
 
@@ -28,7 +31,7 @@ loom {
             clientData()
 
             programArgs("--all", "--mod", rootProject.property("mod_id") as String)
-            programArgs("--output", generatedResources.absolutePath)
+            programArgs("--output", generatedClientResources.absolutePath)
         }
     }
 }
