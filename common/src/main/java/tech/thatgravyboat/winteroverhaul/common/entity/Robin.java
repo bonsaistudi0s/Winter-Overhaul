@@ -167,13 +167,14 @@ public class Robin extends Animal implements FlyingAnimal, GeoEntity {
 
     //region Animation
 
-    public static final RawAnimation IDLE_1 = RawAnimation.begin().thenPlay("animation.robin.idle1");
-    public static final RawAnimation IDLE_2 = RawAnimation.begin().thenPlay("animation.robin.idle2");
-    public static final RawAnimation IDLE_3 = RawAnimation.begin().thenPlay("animation.robin.idle3");
+    public static final RawAnimation IDLE_1 = RawAnimation.begin().thenPlayAndHold("animation.robin.idle1");
+    public static final RawAnimation IDLE_2 = RawAnimation.begin().thenPlayAndHold("animation.robin.idle2");
+    public static final RawAnimation IDLE_3 = RawAnimation.begin().thenPlayAndHold("animation.robin.idle3");
     public static final RawAnimation FLY = RawAnimation.begin().thenLoop("animation.robin.fly");
 
     private <E extends GeoAnimatable> PlayState idle(AnimationState<E> event) {
-        boolean isRunning = !event.getController().getAnimationState().equals(AnimationController.State.STOPPED);
+        AnimationController.State state = event.getController().getAnimationState();
+        boolean isRunning = !state.equals(AnimationController.State.STOPPED) && !state.equals(AnimationController.State.PAUSED);
         if (isFlying()) {
             event.getController().forceAnimationReset();
             return PlayState.STOP;
