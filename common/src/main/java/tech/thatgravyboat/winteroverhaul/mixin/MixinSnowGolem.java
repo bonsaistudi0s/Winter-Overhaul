@@ -91,16 +91,13 @@ public abstract class MixinSnowGolem extends Mob implements IUpgradeAbleSnowGole
     @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
     private void onSaveNbt(CompoundTag pCompound, CallbackInfo ci) {
         ListTag listtag = new ListTag();
-        if (winteroverhaul_upgrades != null) {
-            for (ItemStack itemstack : this.winteroverhaul_upgrades) {
-                if (!itemstack.isEmpty())
-                    listtag.add(itemstack.save(this.registryAccess()));
-                else
-                    listtag.add(new CompoundTag());
-            }
-
-            winteroverhaul_updateUpgrades();
+        for (ItemStack itemstack : this.winteroverhaul_getUpgrades()) {
+            if (!itemstack.isEmpty())
+                listtag.add(itemstack.save(this.registryAccess()));
+            else
+                listtag.add(new CompoundTag());
         }
+
         pCompound.put("GolemUpgrades", listtag);
     }
 
@@ -108,14 +105,12 @@ public abstract class MixinSnowGolem extends Mob implements IUpgradeAbleSnowGole
     private void onLoadNbt(CompoundTag pCompound, CallbackInfo ci) {
         if (pCompound.contains("GolemUpgrades", Tag.TAG_LIST)) {
             ListTag listtag = pCompound.getList("GolemUpgrades", Tag.TAG_COMPOUND);
-            if (winteroverhaul_upgrades != null) {
-                for (int i = 0; i < this.winteroverhaul_upgrades.size(); ++i) {
-                    CompoundTag itemTag = listtag.getCompound(i);
-                    if (!itemTag.isEmpty()) this.winteroverhaul_upgrades.set(i, ItemStack.parseOptional(this.registryAccess(), itemTag));
-                }
-
-                winteroverhaul_updateUpgrades();
+            for (int i = 0; i < this.winteroverhaul_getUpgrades().size(); ++i) {
+                CompoundTag itemTag = listtag.getCompound(i);
+                if (!itemTag.isEmpty()) this.winteroverhaul_getUpgrades().set(i, ItemStack.parseOptional(this.registryAccess(), itemTag));
             }
+
+            winteroverhaul_updateUpgrades();
         }
     }
 
