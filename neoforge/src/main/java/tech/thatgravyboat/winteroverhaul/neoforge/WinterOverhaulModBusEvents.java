@@ -10,6 +10,7 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import tech.thatgravyboat.winteroverhaul.client.ModClient;
 import tech.thatgravyboat.winteroverhaul.common.util.EntityAttributesBuilder;
+import tech.thatgravyboat.winteroverhaul.datagen.WinterOverhaulBlockTagDatagen;
 import tech.thatgravyboat.winteroverhaul.datagen.WinterOverhaulItemInfoDatagen;
 import tech.thatgravyboat.winteroverhaul.datagen.WinterOverhaulItemTagDatagen;
 import tech.thatgravyboat.winteroverhaul.datagen.WinterOverhaulLootTableDatagen;
@@ -50,6 +51,7 @@ public class WinterOverhaulModBusEvents {
         event.getGenerator().addProvider(true, (DataProvider.Factory<WinterOverhaulRecipeDatagen.Runner>) output -> new WinterOverhaulRecipeDatagen.Runner(output, event.getLookupProvider()));
         event.getGenerator().addProvider(true, (DataProvider.Factory<WinterOverhaulLootTableDatagen>) output -> new WinterOverhaulLootTableDatagen(output, event.getLookupProvider()));
         event.getGenerator().addProvider(true, (DataProvider.Factory<WinterOverhaulItemTagDatagen>) output -> new WinterOverhaulItemTagDatagen(output, event.getLookupProvider()));
+        event.getGenerator().addProvider(true, (DataProvider.Factory<WinterOverhaulBlockTagDatagen>) output -> new WinterOverhaulBlockTagDatagen(output, event.getLookupProvider()));
     }
 
     @SubscribeEvent
