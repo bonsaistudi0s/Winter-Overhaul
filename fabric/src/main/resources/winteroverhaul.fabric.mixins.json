@@ -6,6 +6,7 @@
     "mixins": [
         "LivingEntityMixin",
         "MobMixin",
+        "SnowGolemMixin",
         "datagen.EntityLootSubProviderMixin"
     ],
     "client": [

@@ -40,3 +40,6 @@ license="All rights reserved"
 
 [[mixins]]
 config = "winteroverhaul.mixins.json"
+
+[[mixins]]
+config = "winteroverhaul.neoforge.mixins.json"
