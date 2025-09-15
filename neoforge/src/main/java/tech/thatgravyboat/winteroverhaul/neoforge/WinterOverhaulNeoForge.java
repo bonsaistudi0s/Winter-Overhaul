@@ -23,7 +23,7 @@ public class WinterOverhaulNeoForge {
         NeoForge.EVENT_BUS.register(this);
         modBus.register(WinterOverhaulModBusEvents.class);
         MOD.register();
-        WinterOverhaulAttachmentTypes.init();
+        WinterOverhaulAttachmentTypes.ATTACHMENT_TYPES.register(modBus);
     }
 
     @SubscribeEvent
