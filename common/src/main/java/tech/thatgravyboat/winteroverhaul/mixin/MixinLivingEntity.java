@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import tech.thatgravyboat.winteroverhaul.common.items.SkateItem;
+import tech.thatgravyboat.winteroverhaul.common.registry.ModBlockTags;
 
 @Mixin(LivingEntity.class)
 public abstract class MixinLivingEntity extends Entity {
@@ -23,7 +24,7 @@ public abstract class MixinLivingEntity extends Entity {
     @Inject(method = "getBlockSpeedFactor", at = @At("HEAD"), cancellable = true)
     private void onGetBlockSpeedFactor(CallbackInfoReturnable<Float> cir) {
         BlockState state = this.level().getBlockState(this.getBlockPosBelowThatAffectsMyMovement());
-        boolean isIce = state.is(BlockTags.ICE);
+        boolean isIce = state.is(ModBlockTags.ICE);
         //noinspection ConstantConditions
         boolean isWearingBoots = (Object)this instanceof LivingEntity livingEntity && livingEntity.getItemBySlot(EquipmentSlot.FEET).getItem() instanceof SkateItem;
         if (isIce && isWearingBoots) cir.setReturnValue(1.05f);
@@ -40,7 +41,7 @@ public abstract class MixinLivingEntity extends Entity {
     )
     private float changeFriction(float friction) {
         BlockState state = this.level().getBlockState(this.getBlockPosBelowThatAffectsMyMovement());
-        boolean isIce = state.is(BlockTags.ICE);
+        boolean isIce = state.is(ModBlockTags.ICE);
         //noinspection ConstantConditions
         if (isIce && !this.isSprinting() && (Object)this instanceof LivingEntity livingEntity && livingEntity.getItemBySlot(EquipmentSlot.FEET).getItem() instanceof SkateItem) {
             return 0.8F;

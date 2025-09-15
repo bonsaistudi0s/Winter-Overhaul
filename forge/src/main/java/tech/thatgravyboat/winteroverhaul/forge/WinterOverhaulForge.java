@@ -30,6 +30,7 @@ import tech.thatgravyboat.winteroverhaul.client.ModClient;
 import tech.thatgravyboat.winteroverhaul.common.registry.ModItems;
 import tech.thatgravyboat.winteroverhaul.common.util.BiomeSpawns;
 import tech.thatgravyboat.winteroverhaul.common.util.EntityAttributesBuilder;
+import tech.thatgravyboat.winteroverhaul.datagen.WinterOverhaulBlockTagDatagen;
 import tech.thatgravyboat.winteroverhaul.datagen.WinterOverhaulLootTableDatagen;
 import tech.thatgravyboat.winteroverhaul.datagen.WinterOverhaulRecipeDatagen;
 
@@ -124,5 +125,6 @@ public class WinterOverhaulForge {
     public static void onDataGeneration(GatherDataEvent event) {
         event.getGenerator().addProvider(event.includeServer(), (DataProvider.Factory<WinterOverhaulRecipeDatagen>) WinterOverhaulRecipeDatagen::new);
         event.getGenerator().addProvider(event.includeServer(), (DataProvider.Factory<WinterOverhaulLootTableDatagen>) WinterOverhaulLootTableDatagen::new);
+        event.getGenerator().addProvider(event.includeServer(), (DataProvider.Factory<WinterOverhaulBlockTagDatagen>) output -> new WinterOverhaulBlockTagDatagen(output, event.getLookupProvider()));
     }
 }

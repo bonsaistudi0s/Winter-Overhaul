@@ -1,0 +1,9 @@
+{
+  "values": [
+    "minecraft:frosted_ice",
+    {
+      "id": "#minecraft:ice",
+      "required": false
+    }
+  ]
+}
