@@ -6,6 +6,7 @@ import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.packs.VanillaEntityLoot;
 import net.minecraft.world.entity.EntityType;
+import tech.thatgravyboat.winteroverhaul.datagen.WinterOverhaulBlockTagDatagen;
 import tech.thatgravyboat.winteroverhaul.datagen.WinterOverhaulItemTagDatagen;
 import tech.thatgravyboat.winteroverhaul.datagen.WinterOverhaulLootTableDatagen;
 import tech.thatgravyboat.winteroverhaul.datagen.WinterOverhaulRecipeDatagen;
@@ -18,5 +19,6 @@ public class WinterOverhaulFabricDatagen implements DataGeneratorEntrypoint {
         pack.addProvider(WinterOverhaulRecipeDatagen::new);
         pack.addProvider(WinterOverhaulLootTableDatagen::new);
         pack.addProvider(WinterOverhaulItemTagDatagen::new);
+        pack.addProvider(WinterOverhaulBlockTagDatagen::new);
     }
 }
