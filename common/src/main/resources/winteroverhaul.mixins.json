@@ -1,11 +1,12 @@
 {
-  "required": true,
-  "package": "tech.thatgravyboat.winteroverhaul.mixin",
-  "compatibilityLevel": "JAVA_17",
-  "minVersion": "0.8.5",
-  "mixins": [
-    "MixinLivingEntity",
-    "MixinSnowball",
-    "MixinSnowGolem"
-  ]
+    "required": true,
+    "package": "tech.thatgravyboat.winteroverhaul.mixin",
+    "compatibilityLevel": "JAVA_17",
+    "minVersion": "0.8.5",
+    "mixins": [
+        "AccessorEntity",
+        "MixinLivingEntity",
+        "MixinSnowball",
+        "MixinSnowGolem"
+    ]
 }
