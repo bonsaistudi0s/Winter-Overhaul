@@ -17,8 +17,15 @@ sourceSets {
 
 loom {
     runs {
-        create("data") {
-            data()
+        create("dataServer") {
+            serverData()
+
+            programArgs("--all", "--mod", rootProject.property("mod_id") as String)
+            programArgs("--output", generatedResources.absolutePath)
+        }
+
+        create("dataClient") {
+            clientData()
 
             programArgs("--all", "--mod", rootProject.property("mod_id") as String)
             programArgs("--output", generatedResources.absolutePath)

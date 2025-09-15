@@ -50,6 +50,10 @@ public class WinterOverhaulModBusEvents {
         event.getGenerator().addProvider(true, (DataProvider.Factory<WinterOverhaulRecipeDatagen.Runner>) output -> new WinterOverhaulRecipeDatagen.Runner(output, event.getLookupProvider()));
         event.getGenerator().addProvider(true, (DataProvider.Factory<WinterOverhaulLootTableDatagen>) output -> new WinterOverhaulLootTableDatagen(output, event.getLookupProvider()));
         event.getGenerator().addProvider(true, (DataProvider.Factory<WinterOverhaulItemTagDatagen>) output -> new WinterOverhaulItemTagDatagen(output, event.getLookupProvider()));
+    }
+
+    @SubscribeEvent
+    public static void onDataGenerateClient(GatherDataEvent.Client event) {
         event.getGenerator().addProvider(true, (DataProvider.Factory<WinterOverhaulItemInfoDatagen>) WinterOverhaulItemInfoDatagen::new);
     }
 }
