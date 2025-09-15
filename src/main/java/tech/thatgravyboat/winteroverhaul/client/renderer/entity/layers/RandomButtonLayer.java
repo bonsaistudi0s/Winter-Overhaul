@@ -41,7 +41,7 @@ public class RandomButtonLayer extends GeoLayerRenderer {
         VertexConsumer consumer = buffer.getBuffer(RenderType.entityTranslucent(getRandomTexture(entity.getUUID())));
         getRenderer().render(normalModel, entity, partialTicks,
                 null, stack, null, consumer,
-                packedLightIn, GeoEntityRenderer.getPackedOverlay(livingEntity, 0),
+                packedLightIn, ((GeoEntityRenderer) this.getRenderer()).getOverlay(livingEntity, 0),
                 1f, 1f, 1f, 1f);
     }
 
