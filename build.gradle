@@ -1,29 +1,31 @@
 buildscript {
     repositories {
-        maven { url = 'https://maven.minecraftforge.net' }
-        maven { url = 'https://nexus.resourcefulbees.com/repository/maven-public/' }
-        mavenCentral()
+        gradlePluginPortal()
     }
+
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-        classpath 'org.parchmentmc:librarian:1.+'
-        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7.+'
+        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
     }
 }
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'org.parchmentmc.librarian.forgegradle'
-apply plugin: 'eclipse'
-apply plugin: 'maven-publish'
+
+plugins {
+    id 'eclipse'
+    id 'idea'
+    id 'maven-publish'
+    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
+}
+
 apply plugin: 'org.spongepowered.mixin'
 
-version = '2.0.1'
+version = '2.0.2'
 group = 'tech.thatgravyboat.winteroverhaul'
 archivesBaseName = 'winteroverhaul'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 minecraft {
-    mappings channel: "official", version: "1.19"
+    mappings channel: "official", version: "1.19.2"
 
     runs {
         client {
@@ -82,9 +84,9 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19-41.1.0'
+    minecraft 'net.minecraftforge:forge:1.19.2-43.5.1'
 
-    implementation fg.deobf("software.bernie.geckolib:geckolib-forge-1.19:3.1.9")
+    implementation fg.deobf("software.bernie.geckolib:geckolib-forge-1.19:3.1.40")
     annotationProcessor 'org.spongepowered:mixin:0.8.5-SNAPSHOT:processor'
 }
 
