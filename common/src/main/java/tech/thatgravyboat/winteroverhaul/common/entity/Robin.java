@@ -167,10 +167,11 @@ public class Robin extends Animal implements FlyingAnimal, GeoEntity {
 
     //region Animation
 
-    public static final RawAnimation IDLE_1 = RawAnimation.begin().thenPlayAndHold("animation.robin.idle1");
-    public static final RawAnimation IDLE_2 = RawAnimation.begin().thenPlayAndHold("animation.robin.idle2");
-    public static final RawAnimation IDLE_3 = RawAnimation.begin().thenPlayAndHold("animation.robin.idle3");
-    public static final RawAnimation FLY = RawAnimation.begin().thenLoop("animation.robin.fly");
+    public static final RawAnimation IDLE_1 = RawAnimation.begin().thenPlayAndHold("robin_idle_1");
+    public static final RawAnimation IDLE_2 = RawAnimation.begin().thenPlayAndHold("robin_idle_2");
+    public static final RawAnimation IDLE_3 = RawAnimation.begin().thenPlayAndHold("robin_idle_3");
+    public static final RawAnimation WALK = RawAnimation.begin().thenLoop("robin_walk");
+    public static final RawAnimation FLY = RawAnimation.begin().thenLoop("robin_fly");
 
     private <E extends GeoAnimatable> PlayState idle(AnimationState<E> event) {
         AnimationController.State state = event.getController().getAnimationState();
@@ -203,6 +204,15 @@ public class Robin extends Animal implements FlyingAnimal, GeoEntity {
         return PlayState.STOP;
     }
 
+    private <E extends GeoAnimatable> PlayState walking(AnimationState<E> event) {
+        if (event.isMoving() && !isFlying()) {
+            event.getController().setAnimation(WALK);
+            return PlayState.CONTINUE;
+        }
+        event.getController().forceAnimationReset();
+        return PlayState.STOP;
+    }
+
     private <E extends GeoAnimatable> PlayState flying(AnimationState<E> event) {
         if (isFlying()) {
             event.getController().setAnimation(FLY);
@@ -215,6 +225,7 @@ public class Robin extends Animal implements FlyingAnimal, GeoEntity {
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "flight_controller", 0, this::flying));
+        controllers.add(new AnimationController<>(this, "walk_controller", 0, this::walking));
         controllers.add(new AnimationController<>(this, "idle_controller", 5, this::idle));
     }
 
