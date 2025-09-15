@@ -1,6 +1,5 @@
 package tech.thatgravyboat.winteroverhaul.neoforge;
 
-import net.minecraft.util.random.Weighted;
 import net.minecraft.world.InteractionResult;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -24,6 +23,7 @@ public class WinterOverhaulNeoForge {
         NeoForge.EVENT_BUS.register(this);
         modBus.register(WinterOverhaulModBusEvents.class);
         MOD.register();
+        WinterOverhaulAttachmentTypes.init();
     }
 
     @SubscribeEvent
