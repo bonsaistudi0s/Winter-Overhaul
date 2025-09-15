@@ -226,9 +226,9 @@ public class Robin extends Animal implements FlyingAnimal, GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "flight_controller", 0, this::flying));
-        controllers.add(new AnimationController<>(this, "walk_controller", 0, this::walking));
-        controllers.add(new AnimationController<>(this, "idle_controller", 5, this::idle));
+        controllers.add(new AnimationController<>("flight_controller", 0, this::flying));
+        controllers.add(new AnimationController<>("walk_controller", 0, this::walking));
+        controllers.add(new AnimationController<>("idle_controller", 5, this::idle));
     }
 
     @Override

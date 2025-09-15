@@ -20,6 +20,6 @@ public class WinterOverhaulBlockTagDatagen extends IntrinsicHolderTagsProvider<B
     protected void addTags(HolderLookup.Provider provider) {
         this.tag(ModBlockTags.ICE)
             .add(Blocks.FROSTED_ICE)
-            .addOptionalTag(BlockTags.ICE.location());
+            .addOptionalTag(BlockTags.ICE);
     }
 }

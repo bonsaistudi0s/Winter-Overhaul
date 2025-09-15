@@ -52,10 +52,10 @@ public abstract class MixinLivingEntity extends Entity {
         return friction;
     }
 
-    @ModifyExpressionValue(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;isInWaterRainOrBubble()Z"))
+    @ModifyExpressionValue(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;isInWaterOrRain()Z"))
     private boolean disableDamageFromRainIfWearingTopHat(boolean original) {
         if ((Object) this instanceof SnowGolem snowGolem && original) {
-            if (((AccessorEntity) this).callIsInRain() && !this.isInWaterOrBubble()
+            if (((AccessorEntity) this).callIsInRain() && !this.isInWater()
                 && ((IUpgradeAbleSnowGolem) snowGolem).getGolemUpgradeInSlot(GolemUpgradeSlot.HAT).is(ModItems.TOP_HAT.get())) {
                 return false;
             }
