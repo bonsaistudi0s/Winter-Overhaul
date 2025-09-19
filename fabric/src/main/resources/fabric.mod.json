@@ -35,6 +35,7 @@
         "fabricloader": ">=${fabric_loader_version}",
         "fabric-api": ">=${fabric_api_version}",
         "minecraft": "${minecraft_version}",
-        "architectury": ">=${architectury_version}"
+        "architectury": ">=${architectury_version}",
+        "geckolib": ">=${geckolib_version}"
     }
 }
