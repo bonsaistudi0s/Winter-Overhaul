@@ -7,6 +7,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
@@ -106,16 +108,19 @@ public class WinterOverhaulForge {
         }
     }
 
+    @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void onClientSetup(EntityRenderersEvent.RegisterRenderers event) {
         ModClient.setupEntityRenderers();
     }
 
+    @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void onRegisterParticles(RegisterParticleProvidersEvent event) {
         ModClient.setupParticles();
     }
 
+    @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void onItemColors(RegisterColorHandlersEvent.Item event) {
         ModClient.onItemColors();
