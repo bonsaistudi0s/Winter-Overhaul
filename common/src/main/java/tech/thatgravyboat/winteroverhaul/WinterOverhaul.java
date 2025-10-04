@@ -50,6 +50,16 @@ public class WinterOverhaul {
         ModSounds.SOUNDS.register();
         ModArmorMaterials.ARMOR_MATERIALS.register();
         ModItems.TAB_REGISTER.register();
+
+        SpawnPlacementsRegistry.register(ModEntities.ROBIN, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING,
+                (entity, level, spawn, pos, random) -> {
+            BlockState state = level.getBlockState(pos.below());
+            boolean isLeaves = state.is(BlockTags.LEAVES);
+            boolean isSnow = state.is(BlockTags.SNOW);
+            boolean isGrass = state.is(Blocks.GRASS_BLOCK);
+
+            return (isLeaves || isSnow || isGrass || state.isAir()) && level.getRawBrightness(pos, 0) > 8;
+        });
     }
 
     public InteractionResult onEntityRightClick(Entity target, ItemStack stack, Player player) {
@@ -127,16 +137,6 @@ public class WinterOverhaul {
     }
 
     public void onComplete() {
-        SpawnPlacementsRegistry.register(ModEntities.ROBIN, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING,
-                (entity, level, spawn, pos, random) -> {
-                    BlockState state = level.getBlockState(pos.below());
-                    boolean isLeaves = state.is(BlockTags.LEAVES);
-                    boolean isSnow = state.is(BlockTags.SNOW);
-                    boolean isGrass = state.is(Blocks.GRASS_BLOCK);
-
-                    return (isLeaves || isSnow || isGrass || state.isAir()) && level.getRawBrightness(pos, 0) > 8;
-
-                });
         CauldronInteraction.WATER.map().put(ModItems.SKATES.get(), CauldronInteraction.DYED_ITEM);
     }
 
