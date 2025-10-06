@@ -111,7 +111,7 @@ public class WinterOverhaulForge {
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void onClientSetup(EntityRenderersEvent.RegisterRenderers event) {
-        ModClient.setupEntityRenderers();
+        ModClient.setupEntityRenderers(event::registerEntityRenderer);
     }
 
     @OnlyIn(Dist.CLIENT)
