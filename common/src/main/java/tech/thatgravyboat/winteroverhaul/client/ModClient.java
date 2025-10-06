@@ -3,6 +3,7 @@ package tech.thatgravyboat.winteroverhaul.client;
 import dev.architectury.registry.client.level.entity.EntityRendererRegistry;
 import dev.architectury.registry.client.particle.ParticleProviderRegistry;
 import dev.architectury.registry.client.rendering.ColorHandlerRegistry;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.EntityType;
 import tech.thatgravyboat.winteroverhaul.client.particles.SnowflakeParticleProvider;
@@ -11,6 +12,9 @@ import tech.thatgravyboat.winteroverhaul.client.renderer.entity.RobinRenderer;
 import tech.thatgravyboat.winteroverhaul.common.registry.ModEntities;
 import tech.thatgravyboat.winteroverhaul.common.registry.ModItems;
 import tech.thatgravyboat.winteroverhaul.common.registry.ModParticles;
+
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 public class ModClient {
     public static void onItemColors() {
@@ -22,9 +26,9 @@ public class ModClient {
 //        }, ModItems.SKATES.get());
     }
 
-    public static void setupEntityRenderers() {
-        EntityRendererRegistry.register(() -> EntityType.SNOW_GOLEM, ReplacedSnowGolemRenderer::new);
-        EntityRendererRegistry.register(ModEntities.ROBIN, RobinRenderer::new);
+    public static void setupEntityRenderers(BiConsumer<EntityType<?>, EntityRendererProvider> rendererRegistry) {
+        rendererRegistry.accept(EntityType.SNOW_GOLEM, ReplacedSnowGolemRenderer::new);
+        rendererRegistry.accept(ModEntities.ROBIN.get(), RobinRenderer::new);
     }
 
     public static void setupParticles() {

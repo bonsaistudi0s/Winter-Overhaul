@@ -33,7 +33,7 @@ public class WinterOverhaulModBusEvents {
 
     @SubscribeEvent
     public static void onClientSetup(EntityRenderersEvent.RegisterRenderers event) {
-        ModClient.setupEntityRenderers();
+        ModClient.setupEntityRenderers(event::registerEntityRenderer);
     }
 
     @SubscribeEvent
