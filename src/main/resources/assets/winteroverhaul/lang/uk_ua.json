@@ -1,0 +1,32 @@
+{
+  "itemGroup.winteroverhaul": "Winter Overhaul",
+
+  "item.winteroverhaul.skates": "Ковзани",
+  "item.winteroverhaul.yellow_scarf": "Жовтий шарф",
+  "item.winteroverhaul.red_scarf": "Червоний шарф",
+  "item.winteroverhaul.cyan_scarf": "Бірюзовий шарф",
+  "item.winteroverhaul.green_scarf": "Зелений шарф",
+  "item.winteroverhaul.top_hat": "Циліндр",
+  "item.winteroverhaul.yellow_winter_hat": "Жовта зимова шапка",
+  "item.winteroverhaul.red_winter_hat": "Червона зимова шапка",
+  "item.winteroverhaul.cyan_winter_hat": "Бірюзова зимова шапка",
+  "item.winteroverhaul.green_winter_hat": "Зелена зимова шапка",
+
+  "item.winteroverhaul.upgrade.header": "Коли на сніговому ґолемі:",
+  "item.winteroverhaul.yellow_winter_hat.desc": "Вогнестійкість",
+  "item.winteroverhaul.yellow_scarf.desc": "Вогнестійкість",
+  "item.winteroverhaul.red_scarf.desc": "x2 шкоди сніжків",
+  "item.winteroverhaul.red_winter_hat.desc": "x2 шкоди сніжків",
+  "item.winteroverhaul.cyan_scarf.desc": "2x швидкости кидання сніжків",
+  "item.winteroverhaul.cyan_winter_hat.desc": "2x швидкости кидання сніжків",
+  "item.winteroverhaul.green_scarf.desc": "x1.5 дальности кидання сніжків",
+  "item.winteroverhaul.green_winter_hat.desc": "x1.5 дальности кидання сніжків",
+  "item.winteroverhaul.top_hat.desc": "x2 макс. здоров'я та швидкости регенерації",
+
+  "subtitles.winteroverhaul.entity.robin.ambient": "Дрізд щебече",
+  "item.winteroverhaul.robin_spawn_egg": "Яйце виклика дрозда",
+  "entity.winteroverhaul.robin": "Дрізд",
+
+  "modmenu.descriptionTranslation.winteroverhaul": "Winter Overhaul, розроблений для MMD 2021 WinterJam, покращить засніжені біоми Minecraft новими зимовими функціями!",
+  "fml.menu.mods.info.description.winteroverhaul": "Winter Overhaul, розроблений для MMD 2021 WinterJam, покращить засніжені біоми Minecraft новими зимовими функціями!"
+}
